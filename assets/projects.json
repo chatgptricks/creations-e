@@ -349,18 +349,18 @@
       "id": "27",
       "name": "Creations E",
       "category": "Web experiences",
-      "description": "An immersive creative portfolio pairing a reactive liquid-chrome sculpture with editorial project worlds and a searchable creative archive.",
+      "description": "An experimental portfolio where projects become physical objects to grab, throw, rearrange, and explore.",
       "tags": [
         "Three.js",
-        "Art direction",
+        "Interaction design",
         "Creative development"
       ],
       "url": null,
       "status": "Project",
       "highlights": [
-        "Interactive chrome sculpture and playful motion",
-        "Art-directed project worlds and live experiences",
-        "Searchable project archive and reduced-motion support"
+        "Tangible project objects and direct manipulation",
+        "Gravity, orbit, float and sort modes",
+        "Live project experiences and a complete searchable index"
       ]
     },
     {

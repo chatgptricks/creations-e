@@ -1,210 +1,147 @@
-import { createEtherScene } from './ether-scene.js';
+import { createPlayground } from './playground-scene.js';
+import { createPlaygroundAudio } from './playground-audio.js';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
-const assetVersion = new URL(import.meta.url).search;
-const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-let motion = !reducedMotion.matches;
+const version = new URL(import.meta.url).search;
+const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const audio = createPlaygroundAudio();
+const media = matchMedia('(prefers-reduced-motion:reduce)');
+const canvas = $('#playground-canvas');
+const hoverLabel = $('#hover-label');
 let scene;
-let projects = [];
-let activeFilter = 'All';
-let currentProject;
-let projectTrigger;
-let launchTimers = [];
-const featured = [
-  {id:'21', image:'engine.webp', line:'A canvas for making what comes next.', kind:'A TOOL FOR CREATORS'},
-  {id:'22', image:'sentient.webp', line:'An identity that moves, reacts, and comes alive.', kind:'A LIVING IDENTITY'},
-  {id:'23', image:'uss.webp', line:'Seven departments. One ship. A world to explore.', kind:'ANOTHER DIMENSION'},
-  {id:'24', image:'story.webp', line:'A little storybook with an entire world inside.', kind:'A LITTLE BIT OF MAGIC'},
-];
-const reveals = new IntersectionObserver(entries => entries.forEach(entry => {
-  if (entry.isIntersecting) { entry.target.classList.add('visible'); reveals.unobserve(entry.target); }
-}), {threshold:.1});
-function observeReveals() { $$('.reveal:not(.visible)').forEach(el => reveals.observe(el)); }
-observeReveals();
+let projects=[];
+let sound=false;
+let motion=!media.matches;
+let filter='All';
+let activeProject;
+let priorFocus;
+let timers=[];
+let announcementTimer;
+let readyTimeout;
+let hoverProject;
+let mouseX=0;
+let mouseY=0;
+const covers={'21':'engine','22':'sentient','23':'uss','24':'story'};
+const modeCopy={drift:['ZERO','GRAVITY','FREE FLOAT / NO RULES','LET IT FLOAT'],gravity:['THINGS','FALL APART','GRAVITY ON / EXPECT A MESS','GRAVITY ON'],orbit:['AROUND','WE GO','ORBIT / ROUND AND ROUND','ORBIT ON'],grid:['UNDER','CONTROL','SORTED / FOR NOW','COLLECTION SORTED']};
 
-scene = createEtherScene($('#ether'), {reducedMotion:!motion,onReady:()=>document.body.classList.add('scene-ready')});
-let scrollQueued = false;
-function onScroll() {
-  if (scrollQueued) return;
-  scrollQueued = true;
-  requestAnimationFrame(() => {
-    const scroll = window.scrollY;
-    const height = document.documentElement.scrollHeight - innerHeight;
-    $('.reading-progress').style.transform = `scaleX(${height ? scroll / height : 0})`;
-    if (motion) scene.setScroll(Math.min(1, scroll / $('.hero').offsetHeight));
-    if (motion) $('.manifesto-star').style.setProperty('--star-turn', `${scroll * .07}deg`);
-    scrollQueued = false;
-  });
+function dismissHint(){ $('#first-instruction').classList.add('hidden'); }
+function announce(text){clearTimeout(announcementTimer);$('.mode-announcement').textContent=text;$('.mode-announcement').classList.add('visible');announcementTimer=setTimeout(()=>$('.mode-announcement').classList.remove('visible'),1900);}
+function setMode(mode){
+  if(!scene)return;
+  scene.setMode(mode); audio.play('mode'); dismissHint();
+  $$('[data-mode]').forEach(button=>{const selected=button.dataset.mode===mode;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected));});
+  const [first,second,readout,message]=modeCopy[mode];
+  $('#mode-word-one').textContent=first;$('#mode-word-two').textContent=second;$('#mode-readout').textContent=readout;announce(message);
 }
-addEventListener('scroll', onScroll, {passive:true});
-addEventListener('resize', onScroll, {passive:true});
-onScroll();
-
-const pointer = $('.pointer');
-addEventListener('pointermove', event => {
-  if (event.pointerType !== 'mouse') return;
-  if (motion) scene.setPointer((event.clientX / innerWidth) * 2 - 1, -(event.clientY / innerHeight) * 2 + 1);
-  pointer.style.transform = `translate(${event.clientX - 44}px,${event.clientY - 44}px)`;
-}, {passive:true});
-document.addEventListener('pointerover', event => {
-  const card = event.target.closest('.project-image');
-  pointer.classList.toggle('active', !!card && motion);
-});
-document.addEventListener('pointerleave', () => pointer.classList.remove('active'));
-function setMotion(enabled) {
-  motion = enabled;
-  document.body.classList.toggle('motion-paused', !enabled);
-  $('.motion-button').setAttribute('aria-pressed', String(!enabled));
-  $('.motion-button').setAttribute('aria-label', enabled ? 'Pause animations' : 'Resume animations');
-  $('.motion-label').textContent = enabled ? 'Motion on' : 'Motion off';
-  document.documentElement.style.scrollBehavior = enabled ? '' : 'auto';
-  scene.setMotion(enabled);
-  if (!enabled) pointer.classList.remove('active');
+function shuffle(){if(!scene)return;scene.shuffle();audio.play('shuffle');dismissHint();announce('COLLECTION SHUFFLED');}
+$$('[data-mode]').forEach(button=>button.addEventListener('click',()=>setMode(button.dataset.mode)));
+$('#shuffle-button').addEventListener('click',shuffle);
+function setMotion(enabled){
+  motion=enabled;
+  document.body.classList.toggle('motion-paused',!motion);
+  $('#motion-toggle').setAttribute('aria-pressed',String(!motion));
+  $('#motion-toggle').setAttribute('aria-label',motion?'Pause motion':'Resume motion');
+  $('#motion-toggle').textContent=motion?'Ⅱ':'▷';
+  scene?.setMotion(motion && !document.querySelector('dialog[open]'));
 }
-$('.motion-button').addEventListener('click', () => setMotion(!motion));
-reducedMotion.addEventListener('change', e => setMotion(!e.matches));
+$('#motion-toggle').addEventListener('click',()=>{setMotion(!motion);announce(motion?'MOTION RESUMED':'MOTION PAUSED / YOU CAN STILL EXPLORE');});
+media.addEventListener('change',event=>setMotion(!event.matches));
 setMotion(motion);
+$('#sound-toggle').addEventListener('click',async()=>{sound=await audio.setEnabled(!sound);$('#sound-toggle').setAttribute('aria-pressed',String(sound));$('.sound-label').textContent=sound?'SOUND ON':'SOUND OFF';if(sound)audio.play('mode');});
 
-let bendInterval;
-function startBend() {
-  if (bendInterval || !motion) return;
-  scene.pulse();
-  document.body.classList.add('bending');
-  bendInterval = setInterval(() => scene.pulse(), 700);
+function updateHoverPosition(){
+  const width=hoverLabel.offsetWidth||200;
+  const height=hoverLabel.offsetHeight||90;
+  const left=Math.max(12,Math.min(innerWidth-width-16,mouseX+23));
+  const top=Math.max(12,Math.min(innerHeight-height-20,mouseY+20));
+  hoverLabel.style.transform=`translate(${left}px,${top}px) rotate(-3deg)`;
 }
-function stopBend() {
-  clearInterval(bendInterval); bendInterval = null;
-  document.body.classList.remove('bending');
+canvas.addEventListener('pointermove',event=>{mouseX=event.clientX;mouseY=event.clientY;if(event.pointerType==='mouse')updateHoverPosition();},{passive:true});
+canvas.addEventListener('pointerdown',()=>{dismissHint();document.body.classList.add('dragging');hoverLabel.classList.remove('visible');audio.play('grab');});
+function stopDragging(){if(document.body.classList.contains('dragging'))audio.play('release');document.body.classList.remove('dragging');}
+addEventListener('pointerup',stopDragging);addEventListener('pointercancel',stopDragging);addEventListener('blur',stopDragging);
+canvas.addEventListener('pointerleave',()=>hoverLabel.classList.remove('visible'));
+function onHover(project){
+  canvas.classList.toggle('hovering',!!project);
+  if(project && project.id!==hoverProject?.id)audio.play('hover');
+  hoverProject=project;
+  if(!project || document.querySelector('dialog[open]') || document.body.classList.contains('dragging')){hoverLabel.classList.remove('visible');return;}
+  hoverLabel.querySelector('strong').textContent=project.name;
+  $('.hover-num').textContent=`OBJECT ${project.id==='meme-deck'?'MD':project.id} / ${project.category.toUpperCase()}`;
+  updateHoverPosition();hoverLabel.classList.add('visible');
 }
-$('#gravity-control').addEventListener('pointerdown', event => {
-  event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); startBend();
-});
-$('#gravity-control').addEventListener('pointerup', stopBend);
-$('#gravity-control').addEventListener('pointercancel', stopBend);
-$('#gravity-control').addEventListener('lostpointercapture', stopBend);
-$('#gravity-control').addEventListener('keydown', event => {
-  if ([' ', 'Enter'].includes(event.key)) { event.preventDefault(); if (!event.repeat) startBend(); }
-});
-$('#gravity-control').addEventListener('keyup', stopBend);
-$('#gravity-control').addEventListener('blur', stopBend);
-addEventListener('blur', stopBend);
+function closeHover(){hoverLabel.classList.remove('visible');}
+function showDialog(dialog){dialog.showModal();scene?.setMotion(false);}
 
-let remix = 0;
-const palettes = ['#ff753e','#c6e89b','#d7b9fc','#ffcc77'];
-const remixCopy = ['Curiosity looks good on you.','Good things happen outside the grid.','Same universe. Different perspective.','A small reminder to keep playing.'];
-$('#remix-button').addEventListener('click', () => {
-  remix++;
-  const playground = $('.playground');
-  playground.style.setProperty('--remix-color',palettes[remix % palettes.length]);
-  $$('.floating-words span').forEach((word,index) => {
-    const x = Math.sin(remix * 2 + index) * (innerWidth < 700 ? 12 : 45);
-    const y = Math.cos(remix + index * 2) * 25;
-    word.style.transform = `translate(${x}px,${y}px) rotate(${Math.sin(remix + index) * 25}deg)`;
-    word.style.color = palettes[(remix + index) % palettes.length];
-  });
-  $('.orbit-a').style.transform = `rotate(${-32 + remix * 40}deg)`;
-  $('.orbit-b').style.transform = `rotate(${55 - remix * 30}deg)`;
-  $('.remix-note').textContent = remixCopy[remix % remixCopy.length];
-});
-
-function renderFeatured() {
-  $('#featured-work').innerHTML = featured.map(item => {
-    const project = projects.find(p=>p.id === item.id);
-    if (!project) return '';
-    return `<button class="project-card reveal" data-project="${project.id}" aria-label="Explore ${escapeHTML(project.name)}"><div class="project-image"><img src="assets/work/${item.image}${assetVersion}" alt="${escapeHTML(project.name)} — project artwork" loading="lazy" width="1600" height="1100"><span class="project-arrow" aria-hidden="true">↗</span></div><div class="project-info"><h3>${escapeHTML(project.name)}</h3><span>${item.kind}</span></div><p>${item.line}</p><div class="card-tags">${project.tags.slice(0,3).map(tag=>`<span>${escapeHTML(tag)}</span>`).join('')}</div></button>`;
-  }).join('');
-  observeReveals();
-  $$('.project-card').forEach(card => {
-    card.addEventListener('pointermove',event=>{
-      if (!motion || event.pointerType !== 'mouse') return;
-      const box = card.getBoundingClientRect();
-      card.style.setProperty('--rx', `${-(event.clientY-box.top-box.height/2)/box.height*3}deg`);
-      card.style.setProperty('--ry', `${(event.clientX-box.left-box.width/2)/box.width*5}deg`);
-    });
-    card.addEventListener('pointerleave',()=>{card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg');});
-  });
+function renderIndex(){
+  const query=$('#project-search').value.trim().toLowerCase();
+  const matches=projects.filter(project=>(filter==='All'||project.category===filter)&&[project.name,project.description,...project.tags].join(' ').toLowerCase().includes(query));
+  $('#project-list').innerHTML=matches.map(project=>`<button class="project-row" data-project="${escapeHTML(project.id)}"><span class="row-id">${project.id==='meme-deck'?'MD':escapeHTML(project.id)}</span><span class="row-name">${escapeHTML(project.name)}</span><span class="row-category">${escapeHTML(project.category)}</span><span class="row-arrow" aria-hidden="true">↗</span></button>`).join('')||'<p class="empty-result">Nothing here. Try a different rabbit hole.</p>';
+  $('.results-count').textContent=`${matches.length} ${matches.length===1?'OBJECT':'OBJECTS'} IN THE COLLECTION`;
 }
-function renderIndex() {
-  const query = $('#project-search').value.toLowerCase().trim();
-  const results = projects.filter(p => (activeFilter==='All'||p.category===activeFilter) && [p.name,p.description,...p.tags].join(' ').toLowerCase().includes(query));
-  $('#index-list').innerHTML = results.map(p=>`<button class="index-row" data-project="${escapeHTML(p.id)}"><span class="index-num">${escapeHTML(p.id==='meme-deck'?'＋':p.id)}</span><strong>${escapeHTML(p.name)}</strong><span class="index-category">${escapeHTML(p.category)}</span><span class="index-arrow" aria-hidden="true">↗</span></button>`).join('') || '<p class="index-empty">No projects in this corner of the universe. Try another search.</p>';
-  $('.results-count').textContent = `${results.length} ${results.length===1?'PROJECT':'PROJECTS'} TO EXPLORE`;
-}
-function setBodyLock() { document.body.classList.toggle('modal-open', !!document.querySelector('dialog[open]')); }
-function openIndex() { $('#index-dialog').showModal(); setBodyLock(); renderIndex(); }
-$$('.index-trigger').forEach(button=>button.addEventListener('click',openIndex));
+function openIndex(){closeHover();renderIndex();showDialog($('#index-dialog'));audio.play('open');}
+$('#index-button').addEventListener('click',openIndex);$('#fallback-index').addEventListener('click',openIndex);
 $('.index-close').addEventListener('click',()=>$('#index-dialog').close());
-$('#index-dialog').addEventListener('close',setBodyLock);
 $('#project-search').addEventListener('input',renderIndex);
 $$('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
-  activeFilter=button.dataset.filter;
-  $$('[data-filter]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});
-  renderIndex();
+  filter=button.dataset.filter;$$('[data-filter]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});renderIndex();audio.play('hover');
 }));
+$('#about-button').addEventListener('click',()=>{showDialog($('#about-dialog'));closeHover();audio.play('open');});
+$('.about-close').addEventListener('click',()=>$('#about-dialog').close());
+$('#help-button').addEventListener('click',()=>{showDialog($('#help-dialog'));closeHover();audio.play('open');});
+$$('.help-close').forEach(button=>button.addEventListener('click',()=>$('#help-dialog').close()));
+$$('dialog').forEach(dialog=>{
+  dialog.addEventListener('click',event=>{if(event.target===dialog && event.clientX){const box=dialog.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)dialog.close();}});
+  dialog.addEventListener('close',()=>{audio.play('close');scene?.setMotion(motion && !document.querySelector('dialog[open]'));});
+});
+function clearTimers(){timers.forEach(clearTimeout);timers=[];}
+const projectDialog=$('#project-dialog');
+function renderProject(project){
+  clearTimers();projectDialog.classList.remove('is-running');projectDialog.setAttribute('aria-label',project.name);$('.project-stamp').textContent='CREATIONS E / INSPECT';
+  const cover=covers[project.id];
+  $('#project-content').innerHTML=`${cover?`<img class="inspector-art" src="assets/work/${cover}.webp${version}" alt="${escapeHTML(project.name)} project artwork">`:''}<div class="inspector-info"><span class="inspector-number" aria-hidden="true">${project.id==='meme-deck'?'MD':escapeHTML(project.id)}</span><span class="inspector-category">${escapeHTML(project.category.toUpperCase())}</span><h2>${escapeHTML(project.name)}</h2><p>${escapeHTML(project.description)}</p><div class="inspector-tags">${project.tags.map(tag=>`<span>${escapeHTML(tag.toUpperCase())}</span>`).join('')}</div>${project.url?`<button class="solid-button" id="launch-button"><span>ENTER THE PROJECT</span><span>↗</span></button><a class="inspector-external" href="${escapeHTML(project.url)}" target="_blank" rel="noopener noreferrer">OPEN IN A SEPARATE TAB ↗</a>`:`<div class="inspector-note">${project.id==='27'?'You’re already playing with this one.':'From my personal collection. A public version isn’t available yet.'}</div>`}</div>`;
+  $('#project-content').scrollTop=0;
+  $('#launch-button')?.addEventListener('click',()=>launchProject(project));
+}
+function openProject(project,trigger){
+  if(typeof project==='string')project=projects.find(p=>p.id===project);
+  if(!project)return;
+  activeProject=project;priorFocus=trigger||document.activeElement;
+  closeHover();dismissHint();audio.play('open');renderProject(project);
+  if(!projectDialog.open)showDialog(projectDialog);
+}
+function launchProject(project){
+  clearTimers();audio.play('open');projectDialog.classList.add('is-running');projectDialog.setAttribute('aria-label',`${project.name} — live experience`);$('.project-stamp').textContent=`NOW OPEN / ${project.name.toUpperCase()}`;
+  const parsed=new URL(project.url);if(!['https:','http:'].includes(parsed.protocol))return;
+  $('#project-content').innerHTML=`<div class="live-stage"><div class="live-toolbar"><button id="back-to-project">← BACK TO OBJECT</button><span class="stage-name">${escapeHTML(project.name)}</span><a href="${escapeHTML(project.url)}" target="_blank" rel="noopener noreferrer">OPEN IN NEW TAB ↗</a></div><iframe title="${escapeHTML(project.name)} live website" allow="fullscreen; autoplay" referrerpolicy="strict-origin-when-cross-origin"></iframe><p class="live-note">If this experience needs its own tab, <a href="${escapeHTML(project.url)}" target="_blank" rel="noopener noreferrer">open it here ↗</a></p><div class="launch-curtain"><div class="launch-symbol" aria-hidden="true">✳</div><span>OPENING OBJECT ${escapeHTML(project.id)}</span><h3>${escapeHTML(project.name)}</h3><div class="loading-track"><span></span></div><p class="launch-status">Opening the live project…</p></div></div>`;
+  const frame=$('.live-stage iframe');const started=performance.now();
+  const reveal=()=>timers.push(setTimeout(()=>{const curtain=$('.launch-curtain');curtain?.classList.add('done');curtain?.setAttribute('aria-hidden','true');},Math.max(0,1000-(performance.now()-started))));
+  frame.addEventListener('load',reveal,{once:true});frame.src=project.url;
+  timers.push(setTimeout(()=>{if($('.launch-status'))$('.launch-status').textContent='Still loading. You can also open the project in a new tab.';},6500));
+  timers.push(setTimeout(reveal,12000));
+  $('#back-to-project').addEventListener('click',()=>{renderProject(project);$('#launch-button')?.focus();});$('#back-to-project').focus();
+}
+$('.project-close').addEventListener('click',()=>projectDialog.close());
+projectDialog.addEventListener('close',()=>{clearTimers();$('#project-content').innerHTML='';projectDialog.classList.remove('is-running');activeProject=null;if(priorFocus?.isConnected)priorFocus.focus({preventScroll:true});});
+$('#project-list').addEventListener('click',event=>{const button=event.target.closest('[data-project]');if(button){scene?.focusProject(button.dataset.project);openProject(button.dataset.project,button);}});
 
-const projectDialog = $('#project-dialog');
-function clearLaunch() { launchTimers.forEach(clearTimeout); launchTimers=[]; }
-function renderProject(project) {
-  clearLaunch();
-  const artwork=featured.find(item=>item.id===project.id);
-  const hue = Number.parseInt(project.id,10) || 28;
-  $('.viewer-label').textContent = 'CREATIONS E / PROJECT EXPLORER';
-  $('#project-content').innerHTML = `<div class="project-overview"><div class="project-cover" style="--cover-color:hsl(${(hue*31)%360} 18% 22%)">${artwork?`<img src="assets/work/${artwork.image}${assetVersion}" alt="${escapeHTML(project.name)} project artwork">`:`<div class="cover-orbit"></div><span class="cover-initial">${escapeHTML(project.name.split(' ').map(word=>word[0]).slice(0,2).join(''))}</span>`}</div><div class="project-details"><span class="eyebrow">${escapeHTML(project.category)} / ${escapeHTML(project.id)}</span><h2 id="project-title">${escapeHTML(project.name)}</h2><p class="project-description">${escapeHTML(project.description)}</p><div class="card-tags">${project.tags.map(tag=>`<span>${escapeHTML(tag)}</span>`).join('')}</div>${project.highlights?.length?`<ul class="project-highlights">${project.highlights.map(line=>`<li>${escapeHTML(line)}</li>`).join('')}</ul>`:''}<div class="project-actions">${project.url?`<button class="pill dark launch-project">Launch experience <span>↗</span></button><a class="external-link" href="${escapeHTML(project.url)}" target="_blank" rel="noopener noreferrer">Open in a new tab ↗</a>`:`<span class="project-status">${project.id==='27'?'You’re already inside this experiment.':'Part of my creative practice. A public version isn’t available yet.'}</span>`}</div></div></div>`;
-  $('#project-content').scrollTop = 0;
-  $('.launch-project')?.addEventListener('click',()=>launchProject(project));
-}
-function openProject(id,trigger) {
-  const project=projects.find(p=>p.id===id);
-  if (!project) return;
-  currentProject=project;
-  projectTrigger=trigger;
-  renderProject(project);
-  if (!projectDialog.open) projectDialog.showModal();
-  setBodyLock();
-  pointer.classList.remove('active');
-}
-function launchProject(project) {
-  clearLaunch();
-  $('.viewer-label').textContent = `NOW EXPLORING / ${project.name.toUpperCase()}`;
-  const url = new URL(project.url);
-  if (!['https:','http:'].includes(url.protocol)) return;
-  $('#project-content').innerHTML=`<div class="app-stage"><div class="stage-toolbar"><button class="back-project">← Project overview</button><span class="stage-url" id="project-title">${escapeHTML(project.name)} / ${escapeHTML(url.hostname)}</span><a href="${escapeHTML(project.url)}" target="_blank" rel="noopener noreferrer">Open in new tab ↗</a></div><iframe title="${escapeHTML(project.name)} live website" allow="fullscreen; autoplay" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="stage-loader"><span class="loader-mark" aria-hidden="true">✳</span><p>ENTERING ANOTHER WORLD</p><h3>${escapeHTML(project.name)}</h3><div class="loading-bar"></div><p class="launch-status">Getting things ready…</p></div><p class="stage-note">Some experiences need their own tab. <a href="${escapeHTML(project.url)}" target="_blank" rel="noopener noreferrer">Open ${escapeHTML(project.name)} ↗</a></p></div>`;
-  const frame=$('.app-stage iframe');
-  const start=performance.now();
-  const reveal=()=>{
-    launchTimers.push(setTimeout(()=>$('.stage-loader')?.classList.add('done'),Math.max(0,1100-(performance.now()-start))));
-  };
-  frame.addEventListener('load',reveal,{once:true});
-  frame.src=project.url;
-  launchTimers.push(setTimeout(()=>{const status=$('.launch-status');if(status)status.textContent='Still loading — you can also open the experience in a new tab.';},6500));
-  launchTimers.push(setTimeout(reveal,12000));
-  $('.back-project').addEventListener('click',()=>{renderProject(project);$('.launch-project')?.focus();});
-  $('.back-project').focus();
-}
-$('.dialog-close').addEventListener('click',()=>projectDialog.close());
-projectDialog.addEventListener('close',()=>{
-  clearLaunch(); $('#project-content').innerHTML=''; setBodyLock(); currentProject=null;
-  if(projectTrigger?.isConnected) projectTrigger.focus({preventScroll:true});
-});
-projectDialog.addEventListener('click',event=>{if(event.target===projectDialog)projectDialog.close();});
-document.addEventListener('click',event=>{
-  const button=event.target.closest('[data-project]');
-  if(button)openProject(button.dataset.project,button);
-});
 document.addEventListener('keydown',event=>{
-  if(event.key==='/' && !event.metaKey && !event.ctrlKey && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName) && !projectDialog.open){event.preventDefault();if(!$('#index-dialog').open)openIndex();$('#project-search').focus();}
+  if(event.metaKey||event.ctrlKey||event.altKey||event.repeat||['INPUT','TEXTAREA'].includes(document.activeElement.tagName))return;
+  if(document.querySelector('dialog[open]'))return;
+  const modes={'1':'drift','2':'gravity','3':'orbit','4':'grid'};
+  if(modes[event.key]){event.preventDefault();setMode(modes[event.key]);}
+  if(event.key===' '&&!['BUTTON','A'].includes(document.activeElement.tagName)){event.preventDefault();shuffle();}
+  if(event.key==='/'){event.preventDefault();openIndex();$('#project-search').focus();}
+  if(event.key==='?'){showDialog($('#help-dialog'));closeHover();}
 });
-$('#year').textContent=new Date().getFullYear();
-try {
-  const response=await fetch(new URL(`./assets/projects.json${assetVersion}`,import.meta.url));
-  if(!response.ok)throw new Error('Project catalog unavailable');
-  ({projects}=await response.json());
-  $$('.project-count').forEach(el=>el.textContent=projects.length);
-  renderFeatured();renderIndex();
-} catch(error) {
-  $('#featured-work').innerHTML='<p>The project collection couldn’t load. <a href="https://github.com/chatgptricks" target="_blank" rel="noopener noreferrer">Explore my work on GitHub ↗</a></p>';
-  $('#index-list').innerHTML='<p class="index-empty">The collection is temporarily unavailable. Please refresh to try again.</p>';
-  console.error(error);
-}
+function ready(){clearTimeout(readyTimeout);document.body.classList.add('scene-ready');}
+function fallback(){ready();$('.canvas-fallback').hidden=false;canvas.hidden=true;}
+try{
+  const response=await fetch(new URL(`./assets/projects.json${version}`,import.meta.url));
+  if(!response.ok)throw new Error('Project collection unavailable');
+  ({projects}=await response.json());$$('.project-count').forEach(element=>element.textContent=projects.length);renderIndex();
+  readyTimeout=setTimeout(ready,6500);
+  scene=createPlayground(canvas,{projects,onHover,onSelect:project=>openProject(project,canvas),onReady:ready,reducedMotion:!motion});
+  if(canvas.classList.contains('no-webgl')||canvas.parentElement.classList.contains('scene-fallback'))fallback();
+}catch(error){console.error(error);fallback();$('#mode-readout').textContent='OBJECT FIELD UNAVAILABLE';}

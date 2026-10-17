@@ -1,6 +1,6 @@
 import { mkdir, cp, rm, copyFile, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-const files = ['index.html', 'styles.css', 'app.js', 'ether-scene.js'];
+const files = ['index.html', 'styles.css', 'app.js', 'playground-scene.js', 'project-objects.js', 'playground-audio.js'];
 const sources = await Promise.all(files.map(file => readFile(file, 'utf8')));
 const version = createHash('sha256').update(sources.join('\0')).update(await readFile('package-lock.json')).update(await readFile('assets/projects.json')).digest('hex').slice(0, 12);
 const versionImports = source => source.replace(/(\bfrom\s*["'])(\.\/[^"'?#]+\.js)(["'])/g, `$1$2?v=${version}$3`);
