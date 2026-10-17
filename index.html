@@ -1,44 +1,54 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"><meta name="theme-color" content="#ef7b30"><title>Creations E — A creative operating system</title><meta name="description" content="Welcome to Creations E. Explore E’s universe of design, digital products, websites, and experiments through a nostalgic interactive desktop."><link rel="icon" type="image/svg+xml" href="assets/icons/e-logo.svg"><link rel="preload" as="image" href="assets/wallpaper-dreamcore.png"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="windows.css"><link rel="stylesheet" href="explorer.css"><link rel="stylesheet" href="theme.css"><link rel="stylesheet" href="dream.css"><link rel="stylesheet" href="classic-mac.css"><script type="module" src="app.js"></script></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ff753e">
+  <meta name="description" content="Creations E — a designer and creator making digital products, interactive worlds, and things that make you look twice.">
+  <meta property="og:title" content="Creations E — A different kind of gravity.">
+  <meta property="og:description" content="Digital products. Impossible worlds. Beautiful experiments. Enter the creative universe of E.">
+  <title>Creations E — A different kind of gravity</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/space-grotesk.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
 <body>
-<a class="skip-link" href="#desktop-icons">Skip to desktop projects</a>
-<main class="desktop" id="desktop" aria-label="Creations E desktop">
-  <div class="wallpaper" aria-hidden="true"></div><div class="wallpaper-vignette" aria-hidden="true"></div>
-  <div class="dream-soft-focus" aria-hidden="true"></div>
-  <div class="dream-atmosphere" aria-hidden="true">
-    <div class="dream-bloom dream-bloom-sun"></div><div class="dream-bloom dream-bloom-low"></div><div class="dream-bloom dream-bloom-horizon"></div><div class="dream-shafts"></div>
-    <div class="dream-bokeh-field"><i class="dream-bokeh"></i><i class="dream-bokeh"></i><i class="dream-bokeh"></i><i class="dream-bokeh"></i><i class="dream-bokeh"></i></div>
-  </div>
-  <div class="dream-vignette" aria-hidden="true"></div>
-  <div class="desktop-icons" id="desktop-icons" role="group" aria-label="Desktop shortcuts"></div>
-  <div id="window-layer" class="window-layer" aria-label="Application windows"></div>
-  <div class="desktop-edition" aria-hidden="true">Creations E · System 2026<br>Made for curious minds</div>
-  <div class="desktop-tip"><img src="assets/icons/e-logo.svg" alt=""><span><b>Your imagination has a desktop.</b><br>Double-click anything. Make yourself at home.</span><button aria-label="Dismiss desktop tip">×</button></div>
-</main>
-<section id="start-menu" class="start-menu mac-dropdown" aria-label="E menu" hidden>
-  <button data-action="about"><b>About Creations E…</b><span>⌘ I</span></button><hr>
-  <button data-action="explorer"><img src="assets/icons/folder.svg" alt="">My Creations</button>
-  <button data-action="internet"><img src="assets/icons/globe.svg" alt="">The Internet</button>
-  <button data-action="playground"><img src="assets/icons/paint.svg" alt="">3D Playground</button>
-  <button data-action="programs" aria-expanded="false">All Creations<span>▶</span></button><hr>
-  <button data-action="settings">Control Panels…</button>
-  <button data-action="motion"><span id="start-motion-label">Pause motion</span></button><hr>
-  <button data-action="restart">Restart…</button>
-  <div id="programs-menu" class="programs-menu" hidden></div>
-</section>
-<div id="mac-menu" class="mac-dropdown mac-menu" aria-label="Desktop menu" hidden></div>
-<div id="context-menu" class="context-menu" role="menu" hidden></div>
-<div id="calendar-popup" class="calendar-popup" hidden></div>
-<header class="taskbar" aria-label="Desktop menu bar">
-  <button id="start-button" class="start-button" aria-label="Open E menu" aria-haspopup="true" aria-expanded="false"><img src="assets/icons/e-logo.svg" alt="E"></button>
-  <nav class="mac-menus" aria-label="Finder menus"><button class="mac-finder-name" data-action="explorer">Finder</button><button data-mac-menu="file" aria-haspopup="true" aria-expanded="false">File</button><button data-mac-menu="view" aria-haspopup="true" aria-expanded="false">View</button><button data-mac-menu="special" aria-haspopup="true" aria-expanded="false">Special</button></nav>
-  <div class="mac-bar-spacer"></div><span class="mac-edition">Orange edition</span>
-  <button id="clock" aria-label="Date and time" aria-haspopup="true"></button>
-  <button id="app-switcher-button" class="mac-app-switcher" data-app-switcher-trigger aria-label="Switch applications" aria-haspopup="true" aria-expanded="false"><img src="assets/icons/folder.svg" alt=""><span id="active-app">Finder</span><i aria-hidden="true">▾</i></button>
-  <div id="window-menu" class="mac-dropdown mac-window-menu" aria-label="Open applications" hidden><div class="mac-menu-caption">Open applications</div><div id="task-list" class="task-list" aria-label="Open windows"></div><button data-action="show-desktop">Show Desktop</button></div>
-</header>
-<aside class="control-strip" aria-label="Control strip"><span class="control-strip-grip" aria-hidden="true"></span><div class="system-tray"><button data-action="settings" aria-label="Open Control Panels" title="Control Panels"><img src="assets/icons/settings.svg" alt=""></button><button id="motion-button" aria-label="Pause animations" title="Pause animations">✳</button><button id="sound-button" aria-label="Enable interface sounds" title="Enable interface sounds"><img src="assets/icons/audio.svg" alt=""><span class="sound-off">×</span></button></div><span class="control-strip-label">daydream on</span></aside>
-<div class="boot-screen" id="boot-screen" aria-hidden="true"><div class="boot-logo"><img src="assets/icons/e-logo.svg" alt=""><span>Creations <b>E</b></span></div><p>Welcome to your imagination.</p><div class="boot-loader"><i></i><i></i><i></i></div><span class="boot-caption">Creations E · Orange edition</span></div>
-<div class="desktop-toast" role="status" aria-live="polite"></div>
-<noscript><div class="no-script">Creations E is an interactive portfolio. Please enable JavaScript to open the desktop and explore the projects.</div></noscript>
-</body></html>
+  <a class="skip-link" href="#work">Skip to work</a>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="pointer" aria-hidden="true"><span>EXPLORE ↗</span></div>
+  <header class="site-header">
+    <a class="wordmark" href="#top" aria-label="Creations E home">creations <b>E</b><span class="brand-star">✳</span></a>
+    <nav aria-label="Main navigation"><a href="#work">Selected work <sup>04</sup></a><a href="#about">The human</a><button class="index-trigger">The index <sup class="project-count">28</sup></button></nav>
+    <button class="motion-button" aria-pressed="false" aria-label="Pause animations"><span class="motion-dot"></span><span class="motion-label">Motion on</span></button>
+  </header>
+  <main>
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-topline"><span>INDEPENDENT DESIGNER & CREATOR</span><span>CURIOUS BY DEFAULT. DIFFERENT BY DESIGN.</span></div>
+      <div class="hero-heading"><h1 id="hero-title"><span>A different</span><span>kind of</span><span class="serif">gravity.</span></h1><p>Digital products. Impossible worlds.<br>Things that make you look twice.</p><a class="pill dark" href="#work">Enter my universe <span>↘</span></a></div>
+      <div class="scene-wrap"><div class="scene-halo"></div><div class="scene-orbit" aria-hidden="true"></div><canvas id="ether" aria-label="Interactive liquid chrome sculpture"></canvas><span class="scene-coordinate coordinate-one">FORM_001<br>UNDEFINED / UNLIMITED</span><span class="scene-coordinate coordinate-two">↗<br>A WORK IN MOTION</span></div>
+      <button class="gravity-control" id="gravity-control"><span class="gravity-glyph">✳</span><span>HOLD TO<br><b>BEND REALITY</b></span><span class="gravity-ring"></span></button>
+      <button class="orbit-project" data-project="23"><span class="orbit-indicator"></span><span>IN ORBIT NOW<br><b>USS Sentient ↗</b></span></button>
+      <div class="hero-bottom"><span>DESIGN × TECHNOLOGY × IMAGINATION</span><a href="#work">SCROLL TO CHANGE PERSPECTIVE <span>↓</span></a><span>01 / ∞</span></div>
+    </section>
+    <section class="manifesto section-pad" aria-labelledby="manifesto-title">
+      <div class="eyebrow reveal"><span class="tiny-star">✳</span><span>WELCOME TO MY SIDE OF THE INTERNET</span></div>
+      <h2 id="manifesto-title" class="manifesto-text">The best things<br>make you <span class="serif">feel</span><br><span class="word-outline">something.</span><span class="manifesto-star" aria-hidden="true">✳</span></h2>
+      <div class="manifesto-bottom reveal"><span>THIS IS WHERE I MAKE THEM.</span><p>I’m E. I connect design, code and a restless imagination to make useful things feel extraordinary.</p></div>
+    </section>
+    <section class="work section-pad" id="work" aria-labelledby="work-title">
+      <div class="section-heading reveal"><div><span class="eyebrow">01 — SELECTED WORLDS</span><h2 id="work-title">Made to <span class="serif">pull you in.</span></h2></div><span class="small-note">FOUR DIFFERENT DOORS.<br>FOLLOW YOUR CURIOSITY. ↙</span></div>
+      <div class="work-grid" id="featured-work"></div>
+      <button class="archive-link index-trigger reveal"><span>That was the beginning.</span><span>Explore all <b class="project-count">28</b> projects <i>↗</i></span></button>
+    </section>
+    <section class="playground" aria-labelledby="play-title"><div class="play-grid" aria-hidden="true"></div><div class="play-orbit orbit-a" aria-hidden="true"></div><div class="play-orbit orbit-b" aria-hidden="true"></div><span class="eyebrow">NO STRAIGHT LINES BETWEEN IDEAS</span><h2 id="play-title">A little less ordinary.<br>A little more <span class="serif">what if?</span></h2><div class="floating-words" aria-hidden="true"><span>DESIGN</span><span>CODE</span><span>WONDER</span><span>REPEAT</span></div><button class="pill light" id="remix-button">Remix this moment <span>✳</span></button><p class="remix-note" aria-live="polite">Curiosity looks good on you.</p></section>
+    <section class="about section-pad" id="about" aria-labelledby="about-title"><div class="about-art reveal" aria-hidden="true"><div class="identity-orbit"></div><span class="giant-e">E</span><span class="identity-star">✳</span><span class="identity-caption">ONE HUMAN.<br>MANY POSSIBILITIES.</span></div><div class="about-copy"><span class="eyebrow reveal">02 — THE HUMAN IN THE LOOP</span><h2 class="reveal" id="about-title">Designer.<br>Builder.<br><span class="serif">Serial “what if?”</span></h2><p class="reveal">I’m E, a designer and creator working where digital products, storytelling and creative technology collide.</p><p class="reveal secondary">Sometimes I build a tool. Sometimes an entire world. Always something with a point of view.</p><div class="disciplines reveal"><span>ART DIRECTION</span><span>PRODUCT DESIGN</span><span>CREATIVE DEVELOPMENT</span><span>WORLD BUILDING</span></div></div></section>
+    <footer class="footer section-pad"><div class="footer-top"><span class="eyebrow">STILL EXPLORING. ALWAYS CREATING.</span><a href="https://github.com/chatgptricks" target="_blank" rel="noopener noreferrer">Find me on GitHub ↗</a></div><a class="footer-title" href="#top" aria-label="Back to top">Stay <span class="serif">curious.</span><span class="footer-arrow">↗</span></a><div class="footer-bottom"><a class="wordmark" href="#top">creations <b>E</b><span>✳</span></a><span>DESIGNED & BUILT WITH A LITTLE OBSESSION.</span><span>© <span id="year">2026</span> E</span><a href="#top">BACK TO THE SURFACE ↑</a></div></footer>
+  </main>
+  <dialog id="project-dialog" aria-labelledby="project-title"><div class="dialog-topbar"><span class="viewer-label">CREATIONS E / PROJECT EXPLORER</span><button class="dialog-close" aria-label="Close project">Close <span>×</span></button></div><div id="project-content"></div></dialog>
+  <dialog id="index-dialog" aria-labelledby="index-title"><div class="dialog-topbar"><span>THE COMPLETE UNIVERSE</span><button class="index-close" aria-label="Close index">Close <span>×</span></button></div><div class="index-inner"><div class="index-heading"><h2 id="index-title">The <span class="serif">index.</span></h2><span><b class="project-count">28</b> PROJECTS<br>NO SINGLE CATEGORY.</span></div><div class="index-controls"><div class="filters" aria-label="Filter projects"><button data-filter="All" class="active" aria-pressed="true">Everything</button><button data-filter="Digital products" aria-pressed="false">Products</button><button data-filter="Web experiences" aria-pressed="false">Websites</button><button data-filter="AI & automation" aria-pressed="false">AI & tools</button><button data-filter="Creative experiments" aria-pressed="false">Experiments</button></div><label class="search"><span>⌕</span><input type="search" id="project-search" placeholder="Follow a rabbit hole…" aria-label="Search projects"></label></div><p class="results-count" aria-live="polite"></p><div id="index-list"></div></div></dialog>
+  <noscript><style>.reveal{opacity:1;transform:none}</style><p class="noscript">Enable JavaScript to explore the interactive projects. You can also <a href="https://github.com/chatgptricks">find my work on GitHub</a>.</p></noscript>
+</body>
+</html>

@@ -349,18 +349,18 @@
       "id": "27",
       "name": "Creations E",
       "category": "Web experiences",
-      "description": "A creative operating system for exploring a universe of design, products, websites, and experiments",
+      "description": "An immersive creative portfolio pairing a reactive liquid-chrome sculpture with editorial project worlds and a searchable creative archive.",
       "tags": [
-        "Interactive desktop",
-        "Creative development",
-        "Portfolio"
+        "Three.js",
+        "Art direction",
+        "Creative development"
       ],
       "url": null,
       "status": "Project",
       "highlights": [
-        "Draggable and resizable project windows",
-        "The complete project library in a searchable Explorer",
-        "Original dreamcore wallpapers and an interactive 3D playground"
+        "Interactive chrome sculpture and playful motion",
+        "Art-directed project worlds and live experiences",
+        "Searchable project archive and reduced-motion support"
       ]
     },
     {

@@ -1,196 +1,210 @@
-import { createWindowManager } from './windows.js';
-import { createExplorer, createProjectView, iconFor } from './explorer.js';
-import { initScene } from './scene.js';
-import { createBrowserView, withProgramSplash } from './browser.js';
-import { enableDesktopDragging, resetDesktopPositions } from './desktop-drag.js';
-const $ = (s, root=document)=>root.querySelector(s);
-const $$ = (s, root=document)=>[...root.querySelectorAll(s)];
-const safe = value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const icon = name=>`assets/icons/${name}.svg`;
-const readSetting=(key,fallback)=>{try{return localStorage.getItem(key)??fallback;}catch{return fallback;}};
-const saveSetting=(key,value)=>{try{localStorage.setItem(key,value);}catch{}};
-const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-let motionOn=readSetting('ce-motion','on')==='on'&&!reduced.matches;
-let soundOn=readSetting('ce-sound','off')==='on';
-let wallpaper=readSetting('ce-wallpaper','dreamcore');
-let dreamAmbience=Number(readSetting('ce-dream-ambience','76'));
-let sorted=false;
-let projects=[];
-let windowStates=[];
-let chromeScene;
-let toastTimer;
-let desktopDragCleanup;
-const manager=createWindowManager({layer:$('#window-layer'),taskList:$('#task-list'),onChange:states=>{
-  windowStates=states;
-  const active=states.find(state=>state.active);
-  document.body.classList.toggle('has-active-window',Boolean(active));
-  $('#active-app').textContent=active?.title==='My Creations'?'Finder':active?.title.split(' — ')[0]||'Finder';
-}});
+import { createEtherScene } from './ether-scene.js';
 
-function toast(message){$('.desktop-toast').textContent=message;$('.desktop-toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('.desktop-toast').classList.remove('show'),3200);}
-let audioContext;
-function chime(kind='open'){
-  if(!soundOn)return;
-  try{
-    audioContext??=new (window.AudioContext||window.webkitAudioContext)();
-    if(audioContext.state==='suspended')audioContext.resume();
-    const now=audioContext.currentTime;
-    const notes=kind==='startup'?[392,523.25,659.25,783.99]:kind==='close'?[523,392]:[660,880];
-    notes.forEach((frequency,i)=>{const osc=audioContext.createOscillator();const gain=audioContext.createGain();osc.type='sine';osc.frequency.value=frequency;gain.gain.setValueAtTime(0,now+i*.055);gain.gain.linearRampToValueAtTime(.026,now+i*.055+.015);gain.gain.exponentialRampToValueAtTime(.0001,now+i*.055+.23);osc.connect(gain);gain.connect(audioContext.destination);osc.start(now+i*.055);osc.stop(now+i*.055+.25);});
-  }catch{}
-}
-function setMotion(value){motionOn=Boolean(value);$('.control-strip-label').textContent=motionOn?'daydream on':'motion off';document.body.classList.toggle('motion-paused',!motionOn);$('#motion-button').setAttribute('aria-label',motionOn?'Pause animations':'Enable animations');$('#motion-button').title=motionOn?'Pause animations':'Enable animations';$('#motion-button').style.opacity=motionOn?'1':'.55';$('#start-motion-label').textContent=motionOn?'Pause motion':'Enable motion';$$('.settings-motion').forEach(button=>{button.textContent=motionOn?'On':'Off';});chromeScene?.setMotion(motionOn);saveSetting('ce-motion',motionOn?'on':'off');}
-function setSound(value){soundOn=Boolean(value);$('.sound-off').hidden=soundOn;$('#sound-button').setAttribute('aria-label',soundOn?'Mute interface sounds':'Enable interface sounds');$('#sound-button').title=soundOn?'Mute interface sounds':'Enable interface sounds';$$('.settings-sound').forEach(button=>{button.textContent=soundOn?'On':'Off';});saveSetting('ce-sound',soundOn?'on':'off');}
-function setWallpaper(value){wallpaper=['dreamcore','classic','midnight'].includes(value)?value:'dreamcore';const src=wallpaper==='classic'?'wallpaper-classic.png':'wallpaper-dreamcore.png';document.documentElement.style.setProperty('--wallpaper',wallpaper==='midnight'?'linear-gradient(135deg,#172548,#0c1427)':`url('assets/${src}')`);$('#desktop').dataset.wallpaper=wallpaper;$$('.wallpaper-choice').forEach(button=>{const selected=button.dataset.wallpaper===wallpaper;button.classList.toggle('selected',selected);button.setAttribute('aria-pressed',String(selected));});saveSetting('ce-wallpaper',wallpaper);}
-function setDreamAmbience(value){
-  const parsed=Number(value);
-  dreamAmbience=Math.max(0,Math.min(100,Number.isFinite(parsed)?parsed:76));
-  document.documentElement.style.setProperty('--dream-strength',String(dreamAmbience/100));
-  document.body.classList.toggle('dream-off',dreamAmbience===0);
-  $$('.settings-dream').forEach(input=>{input.value=String(dreamAmbience);});
-  $$('.settings-dream-value').forEach(output=>{output.textContent=`${dreamAmbience}%`;});
-  saveSetting('ce-dream-ambience',String(dreamAmbience));
-}
-setMotion(motionOn);setSound(soundOn);setWallpaper(wallpaper);setDreamAmbience(dreamAmbience);
-reduced.addEventListener('change',event=>{if(event.matches)setMotion(false);});
-$('#motion-button').addEventListener('click',()=>{setMotion(!motionOn);toast(motionOn?'Motion is on. Let the ideas move.':'Motion paused. Take your time.');});
-$('#sound-button').addEventListener('click',()=>{setSound(!soundOn);if(soundOn)chime('startup');toast(soundOn?'Interface sounds on':'Interface sounds muted');});
+const $ = selector => document.querySelector(selector);
+const $$ = selector => [...document.querySelectorAll(selector)];
+const assetVersion = new URL(import.meta.url).search;
+const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let motion = !reducedMotion.matches;
+let scene;
+let projects = [];
+let activeFilter = 'All';
+let currentProject;
+let projectTrigger;
+let launchTimers = [];
+const featured = [
+  {id:'21', image:'engine.webp', line:'A canvas for making what comes next.', kind:'A TOOL FOR CREATORS'},
+  {id:'22', image:'sentient.webp', line:'An identity that moves, reacts, and comes alive.', kind:'A LIVING IDENTITY'},
+  {id:'23', image:'uss.webp', line:'Seven departments. One ship. A world to explore.', kind:'ANOTHER DIMENSION'},
+  {id:'24', image:'story.webp', line:'A little storybook with an entire world inside.', kind:'A LITTLE BIT OF MAGIC'},
+];
+const reveals = new IntersectionObserver(entries => entries.forEach(entry => {
+  if (entry.isIntersecting) { entry.target.classList.add('visible'); reveals.unobserve(entry.target); }
+}), {threshold:.1});
+function observeReveals() { $$('.reveal:not(.visible)').forEach(el => reveals.observe(el)); }
+observeReveals();
 
-function node(markup,className='os-app'){const root=document.createElement('section');root.className=className;root.innerHTML=markup;return root;}
-function openProjectInfo(project){
-  const content=createProjectView(project);
-  const live=$('.ce-live-link',content);
-  if(live){live.addEventListener('click',event=>{event.preventDefault();openProject(project);});live.textContent='Open in Creations E ↗';}
-  manager.open({id:`details-${project.id}`,title:`About ${project.name}`,icon:iconFor(project),content,width:680,height:570});
-}
-function openProject(project){
-  closeStart();chime();
-  const id=`project-${project.id}`;
-  if(manager.getWindow(id)){manager.restore(id);return;}
-  const image=iconFor(project);
-  const content=project.url?createBrowserView(project,{icon:image,reducedMotion:!motionOn,onDetails:()=>openProjectInfo(project)}):withProgramSplash(createProjectView(project),project,{icon:image,reducedMotion:!motionOn});
-  manager.open({id,title:project.name,icon:image,content,width:project.url?Math.min(1120,innerWidth-100):740,height:project.url?Math.min(760,innerHeight-100):570,onClose:()=>content.dispose?.()});
-}
-function openExplorer(type='All',focusSearch=false){
-  closeStart();chime();
-  const id=type==='All'?'my-creations':`explorer-${type}`;
-  let record=manager.getWindow(id);
-  if(record){manager.restore(id);}
-  else{
-    const width=Math.min(900,Math.max(650,innerWidth-500));
-    const content=createExplorer({projects,onOpen:openProject,initialFilter:type});
-    record=manager.open({id,title:type==='All'?'My Creations':type,icon:icon('folder'),content,width,height:Math.min(630,innerHeight-155),x:Math.max(230,(innerWidth-width)*.66),y:Math.max(65,innerHeight*.105)});
-  }
-  if(focusSearch)requestAnimationFrame(()=>$('input[type=search]',record.content)?.focus());
-  return record;
-}
-function openAbout(){closeStart();chime();const content=node(`<div class="about-profile"><img src="${icon('user')}" alt=""><div><h1>Hello, I’m E.</h1><small>Designer · Creator · Professional daydreamer</small></div></div><p>I move between design, technology, and storytelling to make ideas tangible. Sometimes that’s a useful tool. Sometimes it’s an entire world.</p><p>Creations E is my desktop-shaped corner of the internet: a collection of digital products, immersive experiences, and experiments that begin with <i>“what if?”</i></p><div class="about-disciplines"><span>Art direction</span><span>Digital experiences</span><span>Creative development</span><span>World building</span></div><div class="about-stats"><div><b>${projects.length}</b>projects & experiments</div><div><b>${projects.filter(p=>p.url).length}</b>worlds to visit online</div></div><div class="os-footer-actions"><button class="os-button primary" data-action="explorer">Explore My Creations</button><button class="os-button" data-close="about-e">OK</button></div>`);manager.open({id:'about-e',title:'About E',icon:icon('user'),content,width:530,height:550});}
-function openInternet(){closeStart();chime();const content=node(`<div class="web-directory-header"><h1>You’ve got places to be.</h1><p>A portal to the projects you can explore online.</p></div>${projects.filter(p=>p.url).map(p=>`<a data-live-project="${p.id}" href="${safe(p.url)}"><img src="${iconFor(p)}" alt=""><span><b>${safe(p.name)}</b><small>${safe(new URL(p.url).hostname)}</small></span><span aria-hidden="true">↗</span><span class="visually-hidden">Opens in an application window</span></a>`).join('')}`,'os-app web-directory');content.addEventListener('click',event=>{const link=event.target.closest('[data-live-project]');if(link){event.preventDefault();openProject(projects.find(p=>p.id===link.dataset.liveProject));}});manager.open({id:'the-internet',title:'The Internet — Creations E',icon:icon('globe'),content,width:610,height:580});}
-function openRecycle(){closeStart();chime();const content=node(`<img src="${icon('recycle')}" alt=""><h1>Nothing to see here. Yet.</h1><p>Even the weird ideas deserve a second chance.</p><p>0 items · A little room for the next “what if?”</p><button class="os-button" data-close="recycle-bin">Close</button>`,'os-app recycle-empty');manager.open({id:'recycle-bin',title:'Trash',icon:icon('recycle'),content,width:460,height:360});}
-function openPlayground(){
-  closeStart();chime();if(manager.getWindow('playground')){manager.restore('playground');return;}
-  const content=node('<div class="playground-info"><h1>Objects of curiosity.</h1><p>Move your pointer. Catch a reflection.<br>A little experiment in light, metal, and motion.</p></div><canvas aria-label="Interactive chrome sculpture"></canvas><button class="playground-spin">✳ Give it a spin</button>','playground-app');
-  const record=manager.open({id:'playground',title:'3D Playground — Objects of curiosity',icon:icon('paint'),content,width:760,height:610,onClose:()=>{chromeScene?.dispose();chromeScene=null;}});
-  requestAnimationFrame(()=>{if(!manager.getWindow('playground'))return;chromeScene=initScene($('canvas',record.content),{reducedMotion:!motionOn});$('.playground-spin',content).addEventListener('click',()=>{if(motionOn){chromeScene.pulse();chime();}else toast('Enable motion in the control strip to spin the sculpture.');});});
-}
-function openSettings(){
-  closeStart();chime();if(manager.getWindow('display-settings')){manager.restore('display-settings');return;}
-  const content=node(`<div class="settings-tabs"><span class="settings-tab">Desktop</span></div><div class="display-monitor"><div class="display-preview"></div></div><p>Every good idea deserves a different backdrop.</p><div class="wallpaper-choices"><button class="wallpaper-choice" data-wallpaper="dreamcore" aria-pressed="false"><span style="background-image:url('assets/wallpaper-dreamcore.png')"></span><span>Orange daydream</span></button><button class="wallpaper-choice" data-wallpaper="classic" aria-pressed="false"><span style="background-image:url('assets/wallpaper-classic.png')"></span><span>Classic blue</span></button><button class="wallpaper-choice" data-wallpaper="midnight" aria-pressed="false"><span class="night-swatch"></span><span>After hours</span></button></div><div class="setting-row dream-setting"><div class="dream-setting-label"><span><b>Dream ambience</b><small>Soft-focus edges, warm haze and drifting light</small></span><output class="settings-dream-value" for="dream-intensity">${dreamAmbience}%</output></div><div class="dream-setting-controls"><span>Clear</span><input id="dream-intensity" class="settings-dream" type="range" min="0" max="100" value="${dreamAmbience}" aria-label="Dream ambience intensity"><span>Dreamy</span></div></div><div class="setting-row"><span><b>Motion effects</b><small>Window transitions and playful details</small></span><button class="os-button settings-motion">${motionOn?'On':'Off'}</button></div><div class="setting-row"><span><b>Interface sounds</b><small>A little nostalgia for your ears</small></span><button class="os-button settings-sound">${soundOn?'On':'Off'}</button></div><div class="os-footer-actions"><button class="os-button primary" data-close="display-settings">OK</button></div>`);
-  $$('.wallpaper-choice',content).forEach(button=>button.addEventListener('click',()=>{setWallpaper(button.dataset.wallpaper);chime();}));
-  $('.settings-dream',content).addEventListener('input',event=>setDreamAmbience(event.currentTarget.value));
-  $('.settings-motion',content).addEventListener('click',event=>{setMotion(!motionOn);event.currentTarget.textContent=motionOn?'On':'Off';});
-  $('.settings-sound',content).addEventListener('click',event=>{setSound(!soundOn);event.currentTarget.textContent=soundOn?'On':'Off';if(soundOn)chime('startup');});
-  manager.open({id:'display-settings',title:'Control Panels',icon:icon('settings'),content,width:480,height:660});setWallpaper(wallpaper);
-}
-function openHelp(){closeStart();chime();const content=node(`<h1>Make yourself at home.</h1><p>This is a portfolio disguised as a tiny operating system. There are a few rabbit holes.</p><div class="help-grid"><div><h2>Open a creation</h2><p>Double-click a desktop icon, or press <kbd>Enter</kbd> on a selected shortcut. On a phone, one tap is enough.</p></div><div><h2>Move things around</h2><p>Drag a window’s striped title bar. Double-click it to maximize. The corner grip resizes it.</p></div><div><h2>Find your way</h2><p>The E menu opens the whole collection. <kbd>/</kbd> opens project search. <kbd>Esc</kbd> dismisses menus.</p></div><div><h2>A little quiet</h2><p>The star in the control strip pauses motion. Interface sounds are optional. Control Panels changes the wallpaper.</p></div></div><div class="os-footer-actions"><button class="os-button primary" data-close="help">Got it</button></div>`);manager.open({id:'help',title:'Help and Support',icon:icon('search'),content,width:610,height:410});}
-function showDesktop(){closeStart();windowStates.filter(s=>!s.minimized).forEach(s=>manager.minimize(s.id));chime('close');}
-function restart(){closeStart();manager.closeAll();sorted=false;resetDesktopPositions();renderDesktop();boot(true);openExplorer();chime('startup');}
-const actions={explorer:()=>openExplorer(),about:openAbout,internet:openInternet,playground:openPlayground,settings:openSettings,help:openHelp,recycle:openRecycle,creative:()=>openExplorer('Creative experiments'),products:()=>openExplorer('Digital products'),recent:()=>openSelected(),search:()=>openExplorer('All',true),'show-desktop':showDesktop,motion:()=>{setMotion(!motionOn);closeStart();},restart,programs:()=>{const menu=$('#programs-menu');menu.hidden=!menu.hidden;$('[data-action=programs]').setAttribute('aria-expanded',String(!menu.hidden));},arrange:()=>{sorted=true;resetDesktopPositions();renderDesktop();closeStart();},'close-window':()=>{const active=windowStates.find(state=>state.active);if(active)manager.close(active.id);closeStart();}};
-function openSelected(){closeStart();chime();const chosen=['21','22','24','23'].map(id=>projects.find(p=>p.id===id));const content=createExplorer({projects:chosen,onOpen:openProject});manager.open({id:'selected-work',title:'Selected Work',icon:icon('engine'),content,width:800,height:500});}
-document.addEventListener('click',event=>{const action=event.target.closest('[data-action]');if(action){actions[action.dataset.action]?.();}const close=event.target.closest('[data-close]');if(close){chime('close');manager.close(close.dataset.close);}});
-
-const specialShortcuts=[{name:'Creations E',image:'computer',action:'explorer'},{name:'About E',image:'user',action:'about'},{name:'The Internet',image:'globe',action:'internet'},{name:'3D Playground',image:'paint',action:'playground'},{name:'Trash',image:'recycle',action:'recycle'}];
-function renderDesktop(){
-  desktopDragCleanup?.();
-  const favorites=['21','22','24','23','09','06'];
-  const ordered=sorted?[...projects].sort((a,b)=>a.name.localeCompare(b.name)):[...projects].sort((a,b)=>{const ai=favorites.indexOf(a.id),bi=favorites.indexOf(b.id);return (ai<0?100:ai)-(bi<0?100:bi);});
-  $('#desktop-icons').innerHTML=specialShortcuts.map(item=>`<button class="desktop-icon" data-shortcut="${item.action}" title="${safe(item.name)} — double-click to open" aria-label="Open ${safe(item.name)}"><img src="${icon(item.image)}" alt=""><span>${safe(item.name)}</span></button>`).join('')+ordered.map(p=>`<button class="desktop-icon" data-project="${p.id}" title="${safe(p.name)} — ${safe(p.description)}" aria-label="Open ${safe(p.name)}"><img src="${iconFor(p)}" alt=""><i class="shortcut-arrow" aria-hidden="true">↗</i><span>${safe(p.name)}</span></button>`).join('');
-  $$('.desktop-icon').forEach(button=>{
-    const open=()=>{if(button.dataset.project)openProject(projects.find(p=>p.id===button.dataset.project));else actions[button.dataset.shortcut]?.();};
-    button.addEventListener('click',event=>{$$('.desktop-icon.selected').forEach(el=>el.classList.remove('selected'));button.classList.add('selected');if(innerWidth<700||event.detail===0)open();});
-    button.addEventListener('dblclick',()=>{if(innerWidth>=700)open();});
+scene = createEtherScene($('#ether'), {reducedMotion:!motion,onReady:()=>document.body.classList.add('scene-ready')});
+let scrollQueued = false;
+function onScroll() {
+  if (scrollQueued) return;
+  scrollQueued = true;
+  requestAnimationFrame(() => {
+    const scroll = window.scrollY;
+    const height = document.documentElement.scrollHeight - innerHeight;
+    $('.reading-progress').style.transform = `scaleX(${height ? scroll / height : 0})`;
+    if (motion) scene.setScroll(Math.min(1, scroll / $('.hero').offsetHeight));
+    if (motion) $('.manifesto-star').style.setProperty('--star-turn', `${scroll * .07}deg`);
+    scrollQueued = false;
   });
-  desktopDragCleanup=enableDesktopDragging($('#desktop-icons'));
 }
-function closeStart(){
-  $('#start-menu').hidden=true;$('#programs-menu').hidden=true;$('#start-button').setAttribute('aria-expanded','false');
-  $('#mac-menu').hidden=true;$('#window-menu').hidden=true;
-  $$('[data-mac-menu],#app-switcher-button,[data-action="programs"]').forEach(button=>button.setAttribute('aria-expanded','false'));
+addEventListener('scroll', onScroll, {passive:true});
+addEventListener('resize', onScroll, {passive:true});
+onScroll();
+
+const pointer = $('.pointer');
+addEventListener('pointermove', event => {
+  if (event.pointerType !== 'mouse') return;
+  if (motion) scene.setPointer((event.clientX / innerWidth) * 2 - 1, -(event.clientY / innerHeight) * 2 + 1);
+  pointer.style.transform = `translate(${event.clientX - 44}px,${event.clientY - 44}px)`;
+}, {passive:true});
+document.addEventListener('pointerover', event => {
+  const card = event.target.closest('.project-image');
+  pointer.classList.toggle('active', !!card && motion);
+});
+document.addEventListener('pointerleave', () => pointer.classList.remove('active'));
+function setMotion(enabled) {
+  motion = enabled;
+  document.body.classList.toggle('motion-paused', !enabled);
+  $('.motion-button').setAttribute('aria-pressed', String(!enabled));
+  $('.motion-button').setAttribute('aria-label', enabled ? 'Pause animations' : 'Resume animations');
+  $('.motion-label').textContent = enabled ? 'Motion on' : 'Motion off';
+  document.documentElement.style.scrollBehavior = enabled ? '' : 'auto';
+  scene.setMotion(enabled);
+  if (!enabled) pointer.classList.remove('active');
 }
-$('#start-button').addEventListener('click',event=>{const isOpen=!$('#start-menu').hidden;closeStart();if(!isOpen){$('#start-menu').hidden=false;$('#start-button').setAttribute('aria-expanded','true');if(event.detail===0)$('button',$('#start-menu')).focus();chime();}});
-const macMenus={
-  file:[['explorer','Open My Creations','⌘ O'],['recent','Selected Work'],['internet','The Internet'],null,['search','Find a Creation…','/'],['close-window','Close Window']],
-  view:[['show-desktop','Show Desktop'],['arrange','Clean Up by Name'],null,['settings','Desktop & Dream Effects…']],
-  special:[['playground','3D Playground'],['creative','Creative Experiments'],null,['motion','Toggle Motion'],['settings','Control Panels…'],['help','Mac Help'],null,['restart','Restart…']]
-};
-$$('[data-mac-menu]').forEach(button=>button.addEventListener('click',event=>{
-  const menu=$('#mac-menu');const key=button.dataset.macMenu;
-  const wasOpen=!menu.hidden&&menu.dataset.menu===key;closeStart();if(wasOpen)return;
-  menu.dataset.menu=key;menu.setAttribute('aria-label',`${button.textContent} menu`);
-  menu.innerHTML=macMenus[key].map(item=>item?`<button data-action="${item[0]}">${item[1]}${item[2]?`<kbd>${item[2]}</kbd>`:''}</button>`:'<hr>').join('');
-  menu.style.left=`${Math.min(button.getBoundingClientRect().left,innerWidth-238)}px`;menu.hidden=false;button.setAttribute('aria-expanded','true');
-  if(event.detail===0)$('button',menu).focus();
+$('.motion-button').addEventListener('click', () => setMotion(!motion));
+reducedMotion.addEventListener('change', e => setMotion(!e.matches));
+setMotion(motion);
+
+let bendInterval;
+function startBend() {
+  if (bendInterval || !motion) return;
+  scene.pulse();
+  document.body.classList.add('bending');
+  bendInterval = setInterval(() => scene.pulse(), 700);
+}
+function stopBend() {
+  clearInterval(bendInterval); bendInterval = null;
+  document.body.classList.remove('bending');
+}
+$('#gravity-control').addEventListener('pointerdown', event => {
+  event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); startBend();
+});
+$('#gravity-control').addEventListener('pointerup', stopBend);
+$('#gravity-control').addEventListener('pointercancel', stopBend);
+$('#gravity-control').addEventListener('lostpointercapture', stopBend);
+$('#gravity-control').addEventListener('keydown', event => {
+  if ([' ', 'Enter'].includes(event.key)) { event.preventDefault(); if (!event.repeat) startBend(); }
+});
+$('#gravity-control').addEventListener('keyup', stopBend);
+$('#gravity-control').addEventListener('blur', stopBend);
+addEventListener('blur', stopBend);
+
+let remix = 0;
+const palettes = ['#ff753e','#c6e89b','#d7b9fc','#ffcc77'];
+const remixCopy = ['Curiosity looks good on you.','Good things happen outside the grid.','Same universe. Different perspective.','A small reminder to keep playing.'];
+$('#remix-button').addEventListener('click', () => {
+  remix++;
+  const playground = $('.playground');
+  playground.style.setProperty('--remix-color',palettes[remix % palettes.length]);
+  $$('.floating-words span').forEach((word,index) => {
+    const x = Math.sin(remix * 2 + index) * (innerWidth < 700 ? 12 : 45);
+    const y = Math.cos(remix + index * 2) * 25;
+    word.style.transform = `translate(${x}px,${y}px) rotate(${Math.sin(remix + index) * 25}deg)`;
+    word.style.color = palettes[(remix + index) % palettes.length];
+  });
+  $('.orbit-a').style.transform = `rotate(${-32 + remix * 40}deg)`;
+  $('.orbit-b').style.transform = `rotate(${55 - remix * 30}deg)`;
+  $('.remix-note').textContent = remixCopy[remix % remixCopy.length];
+});
+
+function renderFeatured() {
+  $('#featured-work').innerHTML = featured.map(item => {
+    const project = projects.find(p=>p.id === item.id);
+    if (!project) return '';
+    return `<button class="project-card reveal" data-project="${project.id}" aria-label="Explore ${escapeHTML(project.name)}"><div class="project-image"><img src="assets/work/${item.image}${assetVersion}" alt="${escapeHTML(project.name)} — project artwork" loading="lazy" width="1600" height="1100"><span class="project-arrow" aria-hidden="true">↗</span></div><div class="project-info"><h3>${escapeHTML(project.name)}</h3><span>${item.kind}</span></div><p>${item.line}</p><div class="card-tags">${project.tags.slice(0,3).map(tag=>`<span>${escapeHTML(tag)}</span>`).join('')}</div></button>`;
+  }).join('');
+  observeReveals();
+  $$('.project-card').forEach(card => {
+    card.addEventListener('pointermove',event=>{
+      if (!motion || event.pointerType !== 'mouse') return;
+      const box = card.getBoundingClientRect();
+      card.style.setProperty('--rx', `${-(event.clientY-box.top-box.height/2)/box.height*3}deg`);
+      card.style.setProperty('--ry', `${(event.clientX-box.left-box.width/2)/box.width*5}deg`);
+    });
+    card.addEventListener('pointerleave',()=>{card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg');});
+  });
+}
+function renderIndex() {
+  const query = $('#project-search').value.toLowerCase().trim();
+  const results = projects.filter(p => (activeFilter==='All'||p.category===activeFilter) && [p.name,p.description,...p.tags].join(' ').toLowerCase().includes(query));
+  $('#index-list').innerHTML = results.map(p=>`<button class="index-row" data-project="${escapeHTML(p.id)}"><span class="index-num">${escapeHTML(p.id==='meme-deck'?'＋':p.id)}</span><strong>${escapeHTML(p.name)}</strong><span class="index-category">${escapeHTML(p.category)}</span><span class="index-arrow" aria-hidden="true">↗</span></button>`).join('') || '<p class="index-empty">No projects in this corner of the universe. Try another search.</p>';
+  $('.results-count').textContent = `${results.length} ${results.length===1?'PROJECT':'PROJECTS'} TO EXPLORE`;
+}
+function setBodyLock() { document.body.classList.toggle('modal-open', !!document.querySelector('dialog[open]')); }
+function openIndex() { $('#index-dialog').showModal(); setBodyLock(); renderIndex(); }
+$$('.index-trigger').forEach(button=>button.addEventListener('click',openIndex));
+$('.index-close').addEventListener('click',()=>$('#index-dialog').close());
+$('#index-dialog').addEventListener('close',setBodyLock);
+$('#project-search').addEventListener('input',renderIndex);
+$$('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
+  activeFilter=button.dataset.filter;
+  $$('[data-filter]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});
+  renderIndex();
 }));
-$('#app-switcher-button').addEventListener('click',event=>{const wasOpen=!$('#window-menu').hidden;closeStart();if(!wasOpen){$('#window-menu').hidden=false;$('#app-switcher-button').setAttribute('aria-expanded','true');if(event.detail===0)$('button',$('#window-menu')).focus();}});
-$('#task-list').addEventListener('click',()=>closeStart());
-document.addEventListener('pointerdown',event=>{if(!event.target.closest('#start-menu,#start-button,#mac-menu,[data-mac-menu],#window-menu,#app-switcher-button'))closeStart();if(!event.target.closest('#context-menu'))$('#context-menu').hidden=true;if(!event.target.closest('#calendar-popup,#clock'))$('#calendar-popup').hidden=true;if(event.target.classList.contains('desktop')||event.target.classList.contains('desktop-icons'))$$('.desktop-icon.selected').forEach(el=>el.classList.remove('selected'));});
-$('#desktop').addEventListener('contextmenu',event=>{
-  if(event.target.closest('.xp-window'))return;
-  event.preventDefault();closeStart();
-  const menu=$('#context-menu');
-  const shortcut=event.target.closest('.desktop-icon');
-  const project=shortcut?.dataset.project?projects.find(p=>p.id===shortcut.dataset.project):null;
-  menu.innerHTML=`${project?`<button role="menuitem" class="context-open"><b>Open ${safe(project.name)}</b></button><hr>`:''}<button role="menuitem" data-action="explorer">Open My Creations</button><button role="menuitem" id="arrange-icons">Arrange Icons by Name</button><button role="menuitem" id="refresh-desktop">Refresh</button><hr><button role="menuitem" data-action="show-desktop">Show Desktop</button><hr><button role="menuitem" data-action="settings">Properties</button>`;
-  menu.hidden=false;menu.style.left=`${Math.max(4,Math.min(event.clientX,innerWidth-240))}px`;menu.style.top=`${Math.max(4,Math.min(event.clientY,innerHeight-250))}px`;
-  $('.context-open',menu)?.addEventListener('click',()=>{menu.hidden=true;openProject(project);});
-  $('#arrange-icons').addEventListener('click',()=>{sorted=true;resetDesktopPositions();renderDesktop();menu.hidden=true;chime();});
-  $('#refresh-desktop').addEventListener('click',()=>{renderDesktop();menu.hidden=true;toast('Desktop refreshed. Curiosity intact.');});
-  $$('[data-action]',menu).forEach(button=>button.addEventListener('click',()=>{menu.hidden=true;}));
-  $('button',menu)?.focus();
+
+const projectDialog = $('#project-dialog');
+function clearLaunch() { launchTimers.forEach(clearTimeout); launchTimers=[]; }
+function renderProject(project) {
+  clearLaunch();
+  const artwork=featured.find(item=>item.id===project.id);
+  const hue = Number.parseInt(project.id,10) || 28;
+  $('.viewer-label').textContent = 'CREATIONS E / PROJECT EXPLORER';
+  $('#project-content').innerHTML = `<div class="project-overview"><div class="project-cover" style="--cover-color:hsl(${(hue*31)%360} 18% 22%)">${artwork?`<img src="assets/work/${artwork.image}${assetVersion}" alt="${escapeHTML(project.name)} project artwork">`:`<div class="cover-orbit"></div><span class="cover-initial">${escapeHTML(project.name.split(' ').map(word=>word[0]).slice(0,2).join(''))}</span>`}</div><div class="project-details"><span class="eyebrow">${escapeHTML(project.category)} / ${escapeHTML(project.id)}</span><h2 id="project-title">${escapeHTML(project.name)}</h2><p class="project-description">${escapeHTML(project.description)}</p><div class="card-tags">${project.tags.map(tag=>`<span>${escapeHTML(tag)}</span>`).join('')}</div>${project.highlights?.length?`<ul class="project-highlights">${project.highlights.map(line=>`<li>${escapeHTML(line)}</li>`).join('')}</ul>`:''}<div class="project-actions">${project.url?`<button class="pill dark launch-project">Launch experience <span>↗</span></button><a class="external-link" href="${escapeHTML(project.url)}" target="_blank" rel="noopener noreferrer">Open in a new tab ↗</a>`:`<span class="project-status">${project.id==='27'?'You’re already inside this experiment.':'Part of my creative practice. A public version isn’t available yet.'}</span>`}</div></div></div>`;
+  $('#project-content').scrollTop = 0;
+  $('.launch-project')?.addEventListener('click',()=>launchProject(project));
+}
+function openProject(id,trigger) {
+  const project=projects.find(p=>p.id===id);
+  if (!project) return;
+  currentProject=project;
+  projectTrigger=trigger;
+  renderProject(project);
+  if (!projectDialog.open) projectDialog.showModal();
+  setBodyLock();
+  pointer.classList.remove('active');
+}
+function launchProject(project) {
+  clearLaunch();
+  $('.viewer-label').textContent = `NOW EXPLORING / ${project.name.toUpperCase()}`;
+  const url = new URL(project.url);
+  if (!['https:','http:'].includes(url.protocol)) return;
+  $('#project-content').innerHTML=`<div class="app-stage"><div class="stage-toolbar"><button class="back-project">← Project overview</button><span class="stage-url" id="project-title">${escapeHTML(project.name)} / ${escapeHTML(url.hostname)}</span><a href="${escapeHTML(project.url)}" target="_blank" rel="noopener noreferrer">Open in new tab ↗</a></div><iframe title="${escapeHTML(project.name)} live website" allow="fullscreen; autoplay" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="stage-loader"><span class="loader-mark" aria-hidden="true">✳</span><p>ENTERING ANOTHER WORLD</p><h3>${escapeHTML(project.name)}</h3><div class="loading-bar"></div><p class="launch-status">Getting things ready…</p></div><p class="stage-note">Some experiences need their own tab. <a href="${escapeHTML(project.url)}" target="_blank" rel="noopener noreferrer">Open ${escapeHTML(project.name)} ↗</a></p></div>`;
+  const frame=$('.app-stage iframe');
+  const start=performance.now();
+  const reveal=()=>{
+    launchTimers.push(setTimeout(()=>$('.stage-loader')?.classList.add('done'),Math.max(0,1100-(performance.now()-start))));
+  };
+  frame.addEventListener('load',reveal,{once:true});
+  frame.src=project.url;
+  launchTimers.push(setTimeout(()=>{const status=$('.launch-status');if(status)status.textContent='Still loading — you can also open the experience in a new tab.';},6500));
+  launchTimers.push(setTimeout(reveal,12000));
+  $('.back-project').addEventListener('click',()=>{renderProject(project);$('.launch-project')?.focus();});
+  $('.back-project').focus();
+}
+$('.dialog-close').addEventListener('click',()=>projectDialog.close());
+projectDialog.addEventListener('close',()=>{
+  clearLaunch(); $('#project-content').innerHTML=''; setBodyLock(); currentProject=null;
+  if(projectTrigger?.isConnected) projectTrigger.focus({preventScroll:true});
 });
-$('.desktop-tip>button').addEventListener('click',()=>{$('.desktop-tip').hidden=true;saveSetting('ce-tip-dismissed','yes');});
-if(readSetting('ce-tip-dismissed','no')==='yes')$('.desktop-tip').hidden=true;
+projectDialog.addEventListener('click',event=>{if(event.target===projectDialog)projectDialog.close();});
+document.addEventListener('click',event=>{
+  const button=event.target.closest('[data-project]');
+  if(button)openProject(button.dataset.project,button);
+});
 document.addEventListener('keydown',event=>{
-  const menu=event.target.closest('#context-menu,#programs-menu,#start-menu,#mac-menu,#window-menu');
-  if(menu&&['ArrowDown','ArrowUp'].includes(event.key)){
-    const buttons=$$('button',menu).filter(button=>button.getClientRects().length);
-    const index=buttons.indexOf(document.activeElement);
-    event.preventDefault();buttons[(index+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length]?.focus();
-  }
-  if(event.key==='Escape'){
-    const trigger=$('.taskbar [aria-expanded="true"]');
-    closeStart();$('#context-menu').hidden=true;$('#calendar-popup').hidden=true;trigger?.focus();
-  }
-  if((event.metaKey||event.ctrlKey)&&event.key.toLowerCase()==='o'){event.preventDefault();openExplorer();}
-  if((event.metaKey||event.ctrlKey)&&event.key.toLowerCase()==='i'){event.preventDefault();openAbout();}
-  if(event.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){event.preventDefault();openExplorer('All',true);}
+  if(event.key==='/' && !event.metaKey && !event.ctrlKey && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName) && !projectDialog.open){event.preventDefault();if(!$('#index-dialog').open)openIndex();$('#project-search').focus();}
 });
-function updateClock(){const now=new Date();$('#clock').textContent=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Costa_Rica'}).format(now);$('#clock').title=new Intl.DateTimeFormat('en-US',{dateStyle:'full',timeZone:'America/Costa_Rica'}).format(now);}
-updateClock();setInterval(updateClock,15000);
-$('#clock').addEventListener('click',()=>{
-  closeStart();const popup=$('#calendar-popup');if(!popup.hidden){popup.hidden=true;return;}
-  const dateParts=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'America/Costa_Rica',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(({type,value})=>[type,value]));
-  const year=Number(dateParts.year),month=Number(dateParts.month),day=Number(dateParts.day);const first=new Date(year,month-1,1).getDay();const days=new Date(year,month,0).getDate();
-  popup.innerHTML=`<div class="calendar-heading">${new Intl.DateTimeFormat('en-US',{month:'long',year:'numeric'}).format(new Date(year,month-1,1))}</div><div class="calendar-grid">${['S','M','T','W','T','F','S'].map(d=>`<span class="calendar-day">${d}</span>`).join('')}${Array(first).fill('<span></span>').join('')}${Array.from({length:days},(_,i)=>`<span class="${i+1===day?'today':''}">${i+1}</span>`).join('')}</div><div class="calendar-zone">America / Costa Rica · A good day to make something.</div>`;popup.hidden=false;
-});
-function boot(force=false){let seen=false;try{seen=sessionStorage.getItem('ce-booted')==='yes';sessionStorage.setItem('ce-booted','yes');}catch{}const screen=$('#boot-screen');screen.classList.remove('is-finished');setTimeout(()=>screen.classList.add('is-finished'),motionOn&&(!seen||force)?750:0);}
-boot();
-try{
-  const response=await fetch('assets/projects.json');if(!response.ok)throw new Error('Could not load projects');
-  projects=(await response.json()).projects;
-  renderDesktop();
-  $('#programs-menu').innerHTML=projects.map(p=>`<button data-program="${p.id}"><img src="${iconFor(p)}" alt=""><span>${safe(p.name)}</span></button>`).join('');
-  $$('[data-program]').forEach(button=>button.addEventListener('click',()=>openProject(projects.find(p=>p.id===button.dataset.program))));
-  openExplorer();
-}catch(error){toast('The project library could not load. Refresh to try again.');console.error(error);}
-window.addEventListener('pagehide',event=>{if(!event.persisted)chromeScene?.dispose();});
+$('#year').textContent=new Date().getFullYear();
+try {
+  const response=await fetch(new URL(`./assets/projects.json${assetVersion}`,import.meta.url));
+  if(!response.ok)throw new Error('Project catalog unavailable');
+  ({projects}=await response.json());
+  $$('.project-count').forEach(el=>el.textContent=projects.length);
+  renderFeatured();renderIndex();
+} catch(error) {
+  $('#featured-work').innerHTML='<p>The project collection couldn’t load. <a href="https://github.com/chatgptricks" target="_blank" rel="noopener noreferrer">Explore my work on GitHub ↗</a></p>';
+  $('#index-list').innerHTML='<p class="index-empty">The collection is temporarily unavailable. Please refresh to try again.</p>';
+  console.error(error);
+}

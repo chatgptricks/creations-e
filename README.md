@@ -1,6 +1,6 @@
 # Creations E
 
-A classic Macintosh inspired portfolio for E, with an amber desktop, dreamcore wallpaper, and the complete Codex project library.
+An immersive portfolio for E: orange, ivory, liquid chrome, and a little creative gravity.
 
 ## Run
 
@@ -10,31 +10,30 @@ npm run build
 npm run dev
 ```
 
-Open http://localhost:4317. The server serves `dist/`; run the build after editing source. `npm run check` checks all JavaScript modules.
+Open http://localhost:4317. The server serves `dist/`; rebuild after changing source. `npm run check` validates JavaScript syntax.
 
 ## Experience
 
-- 28 projects plus system shortcuts, draggable desktop icons, and a searchable Finder
-- Movable, resizable windows with minimize, maximize, and application-menu restoration
-- 17 verified deployed frontends launch in embedded windows after individual splash screens
-- Projects without a deployed frontend open a project overview after the splash
-- Classic menu bar, E menu, control strip, live-project directory, optional synthesized sounds, motion control, calendar, and display settings
-- Dream ambience: soft-focus landscape edges, a warm vignette, drifting light shafts, amber bloom and defocused light, with adjustable intensity in Control Panels
-- Three.js chrome sculpture in the 3D Playground
-- Phone layouts use full workspace windows and single-tap shortcuts
+- A custom Three.js sculpture with procedural studio reflections, orbital light trails, pointer response and scroll choreography
+- A press-and-hold “Bend reality” interaction, with keyboard support
+- Four art-directed project worlds: Engine, Sentient 2.0, USS Sentient and Cuentacuentos
+- An illustrated project explorer with launch transitions and embedded live websites
+- A searchable, filterable index of all 28 projects
+- A playful remix interlude, staggered reveals and responsive card interactions
+- Mobile layouts, native modal focus management, Escape support and reduced-motion controls
 
-`assets/projects.json` owns the project catalogue. Public URLs were verified when this version was created. Embedded apps retain their own login requirements; the toolbar arrow opens an app in an external tab if its browser features need that. No credentials or live account data are copied into the portfolio.
+`assets/projects.json` owns the project catalogue. Embedded sites retain their own authentication and embedding restrictions; every live project also offers an external-tab link. No credentials or account data are copied into this portfolio.
 
-## Artwork
+## Source
 
-Wallpaper generated with the built-in ImageGen tool. The selected asset is `assets/wallpaper-dreamcore.png`; `assets/wallpaper-classic.png` is the earlier blue-sky alternative. The rejected pink version is not part of the project. The final wallpaper prompt is preserved in `assets/WALLPAPER-PROMPT.txt`.
+`index.html`, `styles.css`, `app.js`, and `ether-scene.js` form the current experience. `build.mjs` generates static assets and content-versioned module URLs. The previous desktop design and initial concept are preserved in repository history; older root modules are not part of the current build.
 
-Original retro SVG icons are in `assets/icons/`. Engine, Sentient, and Cuentacuentos artwork is drawn from their existing project assets. Fonts and Three.js retain their licenses. `concepts/beyond-ordinary/` preserves the initial editorial design direction as source only; the desktop is the current site.
+Optimized project covers are in `assets/work/`. Editable source artwork and provenance notes are retained there. They use original project illustrations, the Sentient brand symbol, and a real public USS Sentient capture. Fonts and Three.js retain their licenses.
 
 ## Hosting
 
 Published on **GitHub Pages** at https://chatgptricks.github.io/creations-e/ from https://github.com/chatgptricks/creations-e.
 
-The workflow `.github/workflows/deploy-pages.yml` installs dependencies, checks the JavaScript, builds `dist/`, and deploys it whenever `main` changes. All app assets use relative paths for the `/creations-e/` project URL.
+`.github/workflows/deploy-pages.yml` installs dependencies, checks JavaScript, builds `dist/`, and deploys changes to `main`. Asset and fetch paths remain relative for the `/creations-e/` project URL.
 
 The user explicitly requested GitHub Pages instead of Sites. Do not register, save, or deploy this project using Sites.

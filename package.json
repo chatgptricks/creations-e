@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node server.mjs",
     "build": "node build.mjs",
-    "check": "node --check app.js && node --check windows.js && node --check explorer.js && node --check browser.js && node --check desktop-drag.js && node --check scene.js && node --check build.mjs"
+    "check": "node --check app.js && node --check ether-scene.js && node --check build.mjs"
   },
   "dependencies": {
     "three": "0.180.0"
