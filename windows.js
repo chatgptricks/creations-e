@@ -220,9 +220,9 @@ export function createWindowManager({ layer, taskList, onChange = () => {} }) {
     };
     const closeButton = makeControl('close', 'Close');
     const maximizeButton = makeControl('maximize', 'Maximize');
-    const minimizeButton = makeControl('minimize', 'Collapse');
-    controls.append(maximizeButton, minimizeButton);
-    titlebar.append(closeButton, titleElement, controls);
+    const minimizeButton = makeControl('minimize', 'Minimize');
+    controls.append(closeButton, minimizeButton, maximizeButton);
+    titlebar.append(controls, titleElement);
     const body = document.createElement('div');
     body.className = 'xp-window-body';
     body.append(config.content);

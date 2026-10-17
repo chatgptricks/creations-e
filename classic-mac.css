@@ -86,7 +86,7 @@ a { color: #9b491a; }
 .xp-window.is-active .xp-window-title { background: #f2bb89; }
 .xp-window-title-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .xp-window-title-icon { width: 15px; height: 15px; flex-basis: 15px; image-rendering: pixelated; }
-.xp-window-controls { margin-left: auto; gap: 9px; z-index: 1; background: inherit; padding-left: 6px; }
+.xp-window-controls { margin-left: 0; gap: 9px; z-index: 1; background: inherit; padding: 0; }
 .xp-window-control, .xp-window-control:not(.xp-window-close), .xp-window-close { flex: 0 0 14px; width: 14px; height: 14px; border: 1px solid #5c5042; border-radius: 0; background: #e3dcd0; box-shadow: inset 1px 1px #fff, inset -1px -1px #a79c8b, 0 0 0 2px #dedbd5; z-index: 1; }
 .xp-window.is-active .xp-window-control { background: #fff1d7; box-shadow: inset 1px 1px #fff, inset -1px -1px #c1a581, 0 0 0 2px #f2bb89; }
 .xp-window-control:hover, .xp-window-control:not(.xp-window-close):hover { filter: none; background: #ff9d51; }
@@ -229,7 +229,7 @@ a { color: #9b491a; }
   .desktop-edition, .desktop-tip { display: none; }
   .xp-window-titlebar { flex-basis: 33px; height: 33px; padding: 6px 9px; }
   .xp-window-control, .xp-window-control:not(.xp-window-close) { width: 18px; height: 18px; flex-basis: 18px; }
-  .xp-window-title { max-width: calc(100% - 115px); font-size: 11px; padding: 0 5px; }
+  .xp-window-title { max-width: calc(100% - 180px); font-size: 11px; padding: 0 5px; }
   .xp-window-title-icon { display: none; }
   .xp-window-controls { gap: 7px; }
   .xp-window-maximize > span:after { left: 4px; top: 4px; }
