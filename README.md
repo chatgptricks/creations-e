@@ -31,4 +31,10 @@ Wallpaper generated with the built-in ImageGen tool. The selected asset is `asse
 
 Original retro SVG icons are in `assets/icons/`. Engine, Sentient, and Cuentacuentos artwork is drawn from their existing project assets. Fonts and Three.js retain their licenses. `concepts/beyond-ordinary/` preserves the initial editorial design direction as source only; the desktop is the current site.
 
-The tracked `.openai/hosting.json` contains the Sites identity and static deployment configuration. The Site is owner-private.
+## Hosting
+
+Published on **GitHub Pages** at https://chatgptricks.github.io/creations-e/ from https://github.com/chatgptricks/creations-e.
+
+The workflow `.github/workflows/deploy-pages.yml` installs dependencies, checks the JavaScript, builds `dist/`, and deploys it whenever `main` changes. All app assets use relative paths for the `/creations-e/` project URL.
+
+The user explicitly requested GitHub Pages instead of Sites. Do not register, save, or deploy this project using Sites.
