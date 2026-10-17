@@ -19,6 +19,7 @@ Open http://localhost:4317. The server serves `dist/`; run the build after editi
 - 17 verified deployed frontends launch in embedded windows after individual splash screens
 - Projects without a deployed frontend open a project overview after the splash
 - Start menu, live-project directory, optional synthesized sounds, motion control, calendar, and display settings
+- Dream ambience: soft-focus landscape edges, a warm vignette, drifting light shafts, amber bloom and defocused light, with adjustable intensity in Display Properties
 - Three.js chrome sculpture in the 3D Playground
 - Phone layouts use full workspace windows and single-tap shortcuts
 

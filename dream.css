@@ -1,0 +1,136 @@
+/* Soft-focus optics and slow warm light for Creations E's dream desktop. */
+:root { --dream-strength: .76; }
+.dream-soft-focus,
+.dream-atmosphere,
+.dream-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+/* Background optics sit behind the shortcuts and every application window. */
+.dream-soft-focus {
+  z-index: 0;
+  opacity: var(--dream-strength);
+  background: radial-gradient(ellipse at 50% 43%, transparent 45%, #ffe2b719 78%, #ffedce38 100%);
+  -webkit-mask-image: radial-gradient(ellipse 68% 73% at 50% 44%, transparent 44%, #0005 72%, #000 100%);
+  mask-image: radial-gradient(ellipse 68% 73% at 50% 44%, transparent 44%, #0005 72%, #000 100%);
+}
+@supports ((backdrop-filter: blur(6px)) or (-webkit-backdrop-filter: blur(6px))) {
+  .dream-soft-focus {
+    -webkit-backdrop-filter: blur(6px) saturate(1.08);
+    backdrop-filter: blur(6px) saturate(1.08);
+  }
+}
+/* Luminous atmosphere crosses the desktop; application content remains clear. */
+.dream-atmosphere {
+  z-index: 3;
+  overflow: hidden;
+  opacity: var(--dream-strength);
+  mix-blend-mode: screen;
+}
+.dream-bloom {
+  position: absolute;
+  border-radius: 50%;
+  transform-origin: center;
+}
+.dream-bloom-sun {
+  width: 90%; height: 110%; left: 23%; top: -51%;
+  background: radial-gradient(ellipse, #fff5d7a8 0%, #ffdfa14a 27%, #ffc58019 49%, transparent 69%);
+  opacity: .58;
+  animation: dream-sun-drift 32s ease-in-out infinite alternate;
+}
+.dream-bloom-low {
+  width: 88%; height: 83%; left: -37%; bottom: -37%;
+  background: radial-gradient(ellipse, #fff4d27a 0%, #ffcc9040 29%, #ffc58a14 48%, transparent 68%);
+  opacity: .43;
+  animation: dream-low-drift 38s ease-in-out -12s infinite alternate;
+}
+.dream-bloom-horizon {
+  width: 132%; height: 39%; left: -16%; top: 41%;
+  background: radial-gradient(ellipse, #ffe8b94d, #ffdab51a 38%, transparent 70%);
+  opacity: .47;
+  animation: dream-horizon-breath 28s ease-in-out -7s infinite alternate;
+}
+.dream-shafts {
+  position: absolute;
+  width: 145%; height: 170%; left: -21%; top: -45%;
+  background: linear-gradient(113deg,
+    transparent 0% 29%, #fff8da00 32%, #fff5c72e 34%, #fff7dc08 37%, transparent 40% 47%,
+    #fff3cb00 49%, #fff5d92e 52%, #fff8df10 55%, transparent 59% 66%,
+    #fff4d21a 69%, transparent 74%);
+  filter: blur(12px);
+  opacity: .58;
+  transform: translate3d(-1%, 0, 0) rotate(-3deg);
+  animation: dream-light-pass 36s ease-in-out -9s infinite alternate;
+}
+.dream-bokeh {
+  position: absolute;
+  width: var(--size, 23px); height: var(--size, 23px);
+  left: var(--x, 70%); top: var(--y, 30%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff9e2b0 0%, #fff0c45c 29%, #ffedb61a 56%, transparent 74%);
+  box-shadow: 0 0 18px #ffe4a822;
+  filter: blur(var(--softness, 2px));
+  opacity: var(--glow, .3);
+  animation: dream-bokeh-float var(--duration, 24s) ease-in-out var(--delay, 0s) infinite alternate;
+}
+.dream-bokeh:nth-of-type(1) { --x: 59%; --y: 17%; --size: 37px; --softness: 3px; --duration: 29s; --delay: -8s; --glow: .36; }
+.dream-bokeh:nth-of-type(2) { --x: 88%; --y: 42%; --size: 18px; --duration: 23s; --delay: -17s; --glow: .38; }
+.dream-bokeh:nth-of-type(3) { --x: 35%; --y: 79%; --size: 26px; --softness: 3px; --duration: 32s; --delay: -4s; --glow: .28; }
+.dream-bokeh:nth-of-type(4) { --x: 95%; --y: 72%; --size: 43px; --softness: 4px; --duration: 36s; --delay: -21s; --glow: .3; }
+.dream-bokeh:nth-of-type(5) { --x: 13%; --y: 34%; --size: 15px; --duration: 25s; --delay: -11s; --glow: .24; }
+/* A soft lens edge warms the frame, with an open, readable center. */
+.dream-vignette {
+  z-index: 8;
+  opacity: var(--dream-strength);
+  background:
+    radial-gradient(ellipse 73% 76% at 50% 44%, transparent 45%, #ffecd20a 68%, #ffe4ba21 88%, #fff0d438 100%),
+    radial-gradient(ellipse 75% 79% at 50% 43%, transparent 43%, #4e2d0f0a 72%, #321c083e 100%);
+  box-shadow: inset 0 0 6vw #ffdeb30e;
+}
+body.dream-off .dream-soft-focus,
+body.dream-off .dream-atmosphere,
+body.dream-off .dream-vignette { display: none; }
+/* The slider uses the same small, tactile language as Display Properties. */
+.dream-setting { flex-wrap: wrap; }
+.dream-setting-label { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; }
+.dream-setting output { color: #9b5d23; min-width: 35px; text-align: right; font-size: 10px; }
+.dream-setting-controls { width: 100%; display: flex; align-items: center; gap: 10px; margin-top: -7px; }
+.dream-setting-controls > span { font-size: 9px; color: #8b7d68; }
+.dream-setting input[type=range] { flex: 1; min-width: 0; height: 18px; accent-color: #c77c2b; cursor: pointer; }
+.dream-setting input[type=range]:focus-visible { outline: 1px dotted #9b5d23; outline-offset: 3px; }
+@keyframes dream-sun-drift {
+  from { transform: translate3d(-2%, -1%, 0) scale(.98); opacity: .48; }
+  to { transform: translate3d(3%, 3%, 0) scale(1.05); opacity: .67; }
+}
+@keyframes dream-low-drift {
+  from { transform: translate3d(0, 2%, 0) scale(1.02); opacity: .32; }
+  to { transform: translate3d(3%, -2%, 0) scale(.96); opacity: .5; }
+}
+@keyframes dream-horizon-breath {
+  from { transform: translate3d(-1%, 2%, 0) scaleY(.94); opacity: .31; }
+  to { transform: translate3d(2%, -2%, 0) scaleY(1.07); opacity: .56; }
+}
+@keyframes dream-light-pass {
+  from { transform: translate3d(-3%, 0, 0) rotate(-4deg); opacity: .4; }
+  to { transform: translate3d(3%, 2%, 0) rotate(1deg); opacity: .65; }
+}
+@keyframes dream-bokeh-float {
+  from { transform: translate3d(-12px, 12px, 0) scale(.88); }
+  to { transform: translate3d(18px, -24px, 0) scale(1.13); }
+}
+@media (max-width: 700px) {
+  .dream-atmosphere { opacity: calc(var(--dream-strength) * .55); }
+  .dream-soft-focus { -webkit-backdrop-filter: none; backdrop-filter: none; opacity: calc(var(--dream-strength) * .55); }
+  .dream-shafts { display: none; }
+  .dream-bloom-sun { width: 145%; left: -10%; opacity: .38; }
+  .dream-bloom-low { width: 140%; left: -70%; opacity: .25; }
+  .dream-bloom-horizon { opacity: .24; }
+  .dream-bokeh:nth-of-type(n+3) { display: none; }
+  .dream-vignette { opacity: calc(var(--dream-strength) * .55); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dream-atmosphere * { animation: none !important; }
+}
+body.motion-paused .dream-atmosphere * { animation: none !important; }
