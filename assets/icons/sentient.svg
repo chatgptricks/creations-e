@@ -1,19 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="Sentient"><title>Sentient</title><defs>
- <linearGradient id="blue" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#b5f2ff"/><stop offset=".35" stop-color="#459cec"/><stop offset="1" stop-color="#12429c"/></linearGradient>
- <linearGradient id="deepblue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0e5399"/><stop offset="1" stop-color="#062966"/></linearGradient>
- <linearGradient id="gold" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fff4a2"/><stop offset=".35" stop-color="#ffd14d"/><stop offset="1" stop-color="#dc8216"/></linearGradient>
- <linearGradient id="orange" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#ffed9a"/><stop offset=".36" stop-color="#ffad38"/><stop offset="1" stop-color="#d34f13"/></linearGradient>
- <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".35" stop-color="#dce6f0"/><stop offset=".6" stop-color="#9caebd"/><stop offset=".8" stop-color="#edf5fc"/><stop offset="1" stop-color="#6a8097"/></linearGradient>
- <linearGradient id="green" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#dbffac"/><stop offset=".35" stop-color="#87d64b"/><stop offset="1" stop-color="#267b32"/></linearGradient>
- <linearGradient id="paper" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fffef8"/><stop offset="1" stop-color="#d4dce4"/></linearGradient>
- <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
- <radialGradient id="glass" cx=".3" cy=".22" r=".9"><stop stop-color="#c9f5ff"/><stop offset=".4" stop-color="#5bc2ef"/><stop offset="1" stop-color="#1b5aab"/></radialGradient>
- <filter id="shadow" x="-35%" y="-30%" width="170%" height="180%"><feDropShadow dx=".3" dy="1.5" stdDeviation="1.15" flood-color="#17314c" flood-opacity=".35"/></filter>
-</defs><g filter="url(#shadow)" stroke-linejoin="round" stroke-linecap="round">
- <ellipse cx="24" cy="25" rx="20" ry="9" transform="rotate(-25 24 25)" stroke="#afc5b9" stroke-width="2.3"/>
- <path d="M35 11c-3-4-10-6-16-3-6 3-8 9-4 13 3 3 8 4 12 5 4 2 3 5 0 6-3 2-7 0-9-2l-6 5c4 6 13 8 20 4 7-4 9-11 4-16-3-3-8-4-12-6-3-1-2-4 0-4 2-1 5 0 7 2Z" fill="url(#silver)" stroke="#315b49" stroke-width="1.1"/>
- <path d="M32 12c-5-4-13-3-15 2-3 7 11 7 15 12 4 6-6 13-14 7" stroke="url(#green)" stroke-width="5.5"/>
- <path d="M19 11c3-2 7-3 11-1" stroke="#e8ffdc" stroke-width="1.6"/>
- <path d="M37 17c4 1 7 2 7 5" stroke="#d4e7dc" stroke-width="1.5"/>
- <circle cx="7" cy="31" r="2.6" fill="url(#green)" stroke="#4f7e4d"/>
-</g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" shape-rendering="crispEdges" role="img" aria-label="Sentient">
+<title>Sentient</title>
+<defs><pattern id="dither" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 0h1v1H0zM2 2h1v1H2z" fill="#62594e"/></pattern></defs>
+<g stroke-linejoin="miter" stroke-linecap="square">
+<path d="M9 7h30v3h3v28h-3v3H9v-3H6V10h3z" fill="#fff9e9" stroke="#29251f"/>
+<path d="M11 10h26v3h3v22h-3v3H11v-3H8V13h3z" fill="#ffc58d"/>
+<path d="M18 13h14v3H19v6h10v3h4v10H17v-3h12v-5H18v-3h-4v-8h4z" fill="#29251f"/>
+<path d="M19 14h12v1H19zM18 33h10v1H18z" fill="#f47735"/>
+<path d="M2 20h4v2H2zM42 26h4v2h-4zM11 3h2v4h-2zM35 41h2v4h-2z" fill="#fff9e9" stroke="#29251f"/>
+</g>
+</svg>

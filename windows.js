@@ -1,6 +1,4 @@
-const TASKBAR_HEIGHT = 38;
-
-/** A small desktop window manager with independent window and taskbar state. */
+/** A small desktop window manager with independent window and application state. */
 export function createWindowManager({ layer, taskList, onChange = () => {} }) {
   if (!layer) throw new Error('createWindowManager requires a window layer.');
   const windows = new Map();
@@ -14,7 +12,7 @@ export function createWindowManager({ layer, taskList, onChange = () => {} }) {
     const rect = layer.getBoundingClientRect();
     return {
       width: Math.max(1, layer.clientWidth || window.innerWidth),
-      height: Math.max(1, Math.min(layer.clientHeight || window.innerHeight, window.innerHeight - Math.max(0, rect.top) - TASKBAR_HEIGHT)),
+      height: Math.max(1, layer.clientHeight || window.innerHeight - Math.max(0, rect.top)),
     };
   };
   const isMobile = () => window.innerWidth < 700;
@@ -93,11 +91,16 @@ export function createWindowManager({ layer, taskList, onChange = () => {} }) {
       finish?.();
     }).catch(() => {});
   };
+  const applicationTarget = (record) => {
+    const taskBounds = record.taskButton?.getBoundingClientRect();
+    if (taskBounds?.width && taskBounds?.height) return record.taskButton;
+    return document.querySelector('[data-app-switcher-trigger], #app-switcher-button');
+  };
   const taskTransform = (record) => {
     const from = record.element.getBoundingClientRect();
-    const to = record.taskButton?.getBoundingClientRect();
-    const targetX = to ? to.left + to.width / 2 : from.left + from.width / 2;
-    const targetY = to ? to.top + to.height / 2 : window.innerHeight - 19;
+    const to = applicationTarget(record)?.getBoundingClientRect();
+    const targetX = to?.width ? to.left + to.width / 2 : window.innerWidth - 40;
+    const targetY = to?.height ? to.top + to.height / 2 : 16;
     return `translate(${targetX - from.left - from.width / 2}px, ${targetY - from.top - from.height / 2}px) scale(.12, .06)`;
   };
 
@@ -105,7 +108,7 @@ export function createWindowManager({ layer, taskList, onChange = () => {} }) {
     const record = windows.get(id);
     if (!record || record.minimized) return;
     record.minimized = true;
-    if (record.element.contains(document.activeElement)) record.taskButton?.focus({ preventScroll: true });
+    if (record.element.contains(document.activeElement)) applicationTarget(record)?.focus({ preventScroll: true });
     record.element.inert = true;
     record.element.setAttribute('aria-hidden', 'true');
     if (activeId === id) chooseActive();
@@ -195,11 +198,13 @@ export function createWindowManager({ layer, taskList, onChange = () => {} }) {
     element.tabIndex = -1;
     const titlebar = document.createElement('header');
     titlebar.className = 'xp-window-titlebar';
-    addIcon(titlebar, config.icon, 'xp-window-title-icon');
     const titleElement = document.createElement('span');
     titleElement.className = 'xp-window-title';
-    titleElement.textContent = title;
-    titlebar.append(titleElement);
+    addIcon(titleElement, config.icon, 'xp-window-title-icon');
+    const titleText = document.createElement('span');
+    titleText.className = 'xp-window-title-text';
+    titleText.textContent = title;
+    titleElement.append(titleText);
     const controls = document.createElement('div');
     controls.className = 'xp-window-controls';
     const makeControl = (action, label) => {
@@ -211,13 +216,13 @@ export function createWindowManager({ layer, taskList, onChange = () => {} }) {
       const symbol = document.createElement('span');
       symbol.setAttribute('aria-hidden', 'true');
       control.append(symbol);
-      controls.append(control);
       return control;
     };
-    const minimizeButton = makeControl('minimize', 'Minimize');
-    const maximizeButton = makeControl('maximize', 'Maximize');
     const closeButton = makeControl('close', 'Close');
-    titlebar.append(controls);
+    const maximizeButton = makeControl('maximize', 'Maximize');
+    const minimizeButton = makeControl('minimize', 'Collapse');
+    controls.append(maximizeButton, minimizeButton);
+    titlebar.append(closeButton, titleElement, controls);
     const body = document.createElement('div');
     body.className = 'xp-window-body';
     body.append(config.content);
@@ -233,7 +238,7 @@ export function createWindowManager({ layer, taskList, onChange = () => {} }) {
       taskButton.className = 'xp-task-button';
       taskButton.type = 'button';
       taskButton.title = title;
-      taskButton.setAttribute('aria-label', `Show or minimize ${title}`);
+      taskButton.setAttribute('aria-label', `Switch to ${title}`);
       taskButton.setAttribute('aria-pressed', 'false');
       addIcon(taskButton, config.icon, 'xp-task-icon');
       const taskTitle = document.createElement('span');
@@ -259,7 +264,7 @@ export function createWindowManager({ layer, taskList, onChange = () => {} }) {
     listen(minimizeButton, 'click', () => minimize(id));
     listen(maximizeButton, 'click', () => maximize(record));
     listen(closeButton, 'click', () => close(id));
-    if (taskButton) listen(taskButton, 'click', () => toggle(id));
+    if (taskButton) listen(taskButton, 'click', () => restore(id));
     listen(titlebar, 'dblclick', (event) => {
       if (!event.target.closest('button')) maximize(record);
     });

@@ -13,7 +13,7 @@ export function resetDesktopPositions() {
   for (const layout of activeLayouts) layout();
 }
 
-/** Add XP-style free icon positioning without changing click/keyboard behavior. */
+/** Add classic desktop free icon positioning without changing click/keyboard behavior. */
 export function enableDesktopDragging(container) {
   if (!(container instanceof HTMLElement)) return () => {};
   controllers.get(container)?.();
@@ -85,7 +85,8 @@ export function enableDesktopDragging(container) {
       padding: '0', overflow: 'hidden',
     });
     const size = area();
-    const rows = Math.max(1, Math.floor((size.height - 20) / ROW_STEP));
+    const rows = Math.max(1, Math.floor((size.height - 62) / ROW_STEP));
+    const systemRows = Math.max(1, Math.floor((size.height - 28) / ROW_STEP));
     for (const entry of icons) {
       Object.assign(entry.button.style, {
         position: 'absolute', width: `${ICON_WIDTH}px`, height: `${ICON_HEIGHT}px`,
@@ -93,8 +94,8 @@ export function enableDesktopDragging(container) {
       });
       const saved = entry.key && movedPositions.get(entry.key);
       const initial = {
-        x: 10 + Math.floor(entry.index / rows) * COLUMN_STEP,
-        y: 14 + entry.index % rows * ROW_STEP,
+        x: entry.button.dataset.shortcut ? size.width - ICON_WIDTH - 18 - Math.floor(entry.index / systemRows) * COLUMN_STEP : 18 + Math.floor((entry.index - 5) / rows) * COLUMN_STEP,
+        y: entry.button.dataset.shortcut === 'recycle' ? size.height - ICON_HEIGHT - 15 : 18 + (entry.button.dataset.shortcut ? entry.index % systemRows : (entry.index - 5) % rows) * ROW_STEP,
       };
       const position = bound(saved || initial, size);
       positionIcon(entry, position);

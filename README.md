@@ -1,6 +1,6 @@
 # Creations E
 
-An original Windows XP inspired portfolio for E, with an amber desktop, dreamcore wallpaper, and the complete Codex project library.
+A classic Macintosh inspired portfolio for E, with an amber desktop, dreamcore wallpaper, and the complete Codex project library.
 
 ## Run
 
@@ -14,12 +14,12 @@ Open http://localhost:4317. The server serves `dist/`; run the build after editi
 
 ## Experience
 
-- 28 projects plus system shortcuts, draggable desktop icons, and a searchable Explorer
-- Movable, resizable windows with minimize, maximize, and taskbar restoration
+- 28 projects plus system shortcuts, draggable desktop icons, and a searchable Finder
+- Movable, resizable windows with minimize, maximize, and application-menu restoration
 - 17 verified deployed frontends launch in embedded windows after individual splash screens
 - Projects without a deployed frontend open a project overview after the splash
-- Start menu, live-project directory, optional synthesized sounds, motion control, calendar, and display settings
-- Dream ambience: soft-focus landscape edges, a warm vignette, drifting light shafts, amber bloom and defocused light, with adjustable intensity in Display Properties
+- Classic menu bar, E menu, control strip, live-project directory, optional synthesized sounds, motion control, calendar, and display settings
+- Dream ambience: soft-focus landscape edges, a warm vignette, drifting light shafts, amber bloom and defocused light, with adjustable intensity in Control Panels
 - Three.js chrome sculpture in the 3D Playground
 - Phone layouts use full workspace windows and single-tap shortcuts
 

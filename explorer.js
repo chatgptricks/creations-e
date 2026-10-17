@@ -96,9 +96,9 @@ export function createExplorer({ projects = [], onOpen = () => {}, initialFilter
   toolbar.append(back, separator, searchLabel, viewGroup);
 
   const address = el('div', 'ce-address');
-  address.append(el('span', 'ce-address-label', 'Address'));
+  address.append(el('span', 'ce-address-label', 'Folder'));
   const location = el('div', 'ce-address-location');
-  location.append(icon('folder'), el('span', '', 'C:\\Creations E\\My Creations'));
+  location.append(icon('folder'), el('span', '', 'Creations E : My Creations'));
   address.append(location);
 
   const body = el('div', 'ce-explorer-body');

@@ -1,23 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="My computer"><title>My computer</title><defs>
- <linearGradient id="blue" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#b5f2ff"/><stop offset=".35" stop-color="#459cec"/><stop offset="1" stop-color="#12429c"/></linearGradient>
- <linearGradient id="deepblue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0e5399"/><stop offset="1" stop-color="#062966"/></linearGradient>
- <linearGradient id="gold" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fff4a2"/><stop offset=".35" stop-color="#ffd14d"/><stop offset="1" stop-color="#dc8216"/></linearGradient>
- <linearGradient id="orange" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#ffed9a"/><stop offset=".36" stop-color="#ffad38"/><stop offset="1" stop-color="#d34f13"/></linearGradient>
- <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".35" stop-color="#dce6f0"/><stop offset=".6" stop-color="#9caebd"/><stop offset=".8" stop-color="#edf5fc"/><stop offset="1" stop-color="#6a8097"/></linearGradient>
- <linearGradient id="green" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#dbffac"/><stop offset=".35" stop-color="#87d64b"/><stop offset="1" stop-color="#267b32"/></linearGradient>
- <linearGradient id="paper" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fffef8"/><stop offset="1" stop-color="#d4dce4"/></linearGradient>
- <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
- <radialGradient id="glass" cx=".3" cy=".22" r=".9"><stop stop-color="#c9f5ff"/><stop offset=".4" stop-color="#5bc2ef"/><stop offset="1" stop-color="#1b5aab"/></radialGradient>
- <filter id="shadow" x="-35%" y="-30%" width="170%" height="180%"><feDropShadow dx=".3" dy="1.5" stdDeviation="1.15" flood-color="#17314c" flood-opacity=".35"/></filter>
-</defs><g filter="url(#shadow)" stroke-linejoin="round" stroke-linecap="round">
- <path d="m10 7 29-2 5 4v26l-6 3L8 34Z" fill="#8195aa" stroke="#476582"/>
- <rect x="5" y="7" width="35" height="28" rx="3" fill="url(#silver)" stroke="#61778e"/>
- <rect x="8" y="10" width="29" height="20" rx="1.5" fill="url(#deepblue)" stroke="#47617b"/>
- <path d="M9 11h27v17H9Z" fill="url(#glass)"/>
- <path d="M9 24c7-5 12-4 17-1s6 2 10-1v6H9Z" fill="#78bd53"/>
- <path d="M9 11h27v7c-8-3-17 2-27-1Z" fill="url(#shine)" opacity=".7"/>
- <path d="m20 35-1 5-6 2h20l-6-2-1-5" fill="url(#silver)" stroke="#61778e"/>
- <path d="M13 42h20v2H13Z" fill="#829bb1" stroke="#61778e"/>
- <path d="M10 32h11" stroke="#fff" stroke-width="1.2"/><circle cx="35" cy="32.5" r="1" fill="#7ebc3d"/>
- <path d="m40 11 2-1v22l-2 1" stroke="#b4c4d2"/>
-</g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" shape-rendering="crispEdges" role="img" aria-label="My Macintosh">
+<title>My Macintosh</title>
+<defs><pattern id="dither" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 0h1v1H0zM2 2h1v1H2z" fill="#62594e"/></pattern></defs>
+<g stroke-linejoin="miter" stroke-linecap="square">
+<path d="M10 3h27v2h2v34H8V5h2z" fill="#fff9e9" stroke="#29251f"/>
+<path d="M34 5h3v32h-3zM10 34h24v3H10z" fill="#d6d0c1"/>
+<path d="M12 8h21v18H12z" fill="#29251f"/>
+<path d="M14 10h17v14H14z" fill="#ffc58d"/>
+<path d="M18 13h2v4h-2zM25 13h2v4h-2zM18 19h2v2h7v-2h2v3H18z" fill="#29251f"/>
+<path d="M12 30h6v3h-6z" fill="#f47735" stroke="#29251f"/>
+<path d="M25 30h8v2h-8z" fill="#29251f"/>
+<path d="M7 40h33v4H7z" fill="#fff9e9" stroke="#29251f"/>
+<path d="M10 41h2v1h-2zM14 41h2v1h-2zM18 41h2v1h-2zM22 41h2v1h-2zM26 41h2v1h-2zM30 41h2v1h-2zM34 41h3v1h-3z" fill="#62594e"/>
+</g>
+</svg>
