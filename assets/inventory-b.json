@@ -1,0 +1,197 @@
+{
+  "projects": [
+    {
+      "id": "17",
+      "name": "Link Catcher",
+      "folder": "17 Slack Apps",
+      "category": "AI & automation",
+      "description": "A Slack companion that collects shared links into a searchable, actionable reading queue",
+      "tags": [
+        "Slack",
+        "Automation",
+        "Workflow"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "18",
+      "name": "Sentient HQ",
+      "folder": "18 Sentient Hub",
+      "category": "Web experiences",
+      "description": "An animated isometric headquarters for discovering agency tools, projects and working spaces",
+      "tags": [
+        "Isometric",
+        "Interaction",
+        "Agency"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "19",
+      "name": "Sentient — Seven Rooms",
+      "folder": "19 Sentient Website",
+      "category": "Web experiences",
+      "description": "An agency website reimagined as seven connected rooms of stories, people and work",
+      "tags": [
+        "Art direction",
+        "Storytelling",
+        "Interaction"
+      ],
+      "url": "https://chatgptricks.github.io/sentient-agency-rooms/",
+      "status": "Project"
+    },
+    {
+      "id": "20",
+      "name": "WeTrack",
+      "folder": "20 WeTrack",
+      "category": "Digital products",
+      "description": "An Instagram reporting tool that turns performance screenshots into presentation slides with layout-aware OCR",
+      "tags": [
+        "OCR",
+        "Reporting",
+        "Product design"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "21",
+      "name": "Engine",
+      "folder": "21 Engine",
+      "category": "Digital products",
+      "description": "A collaborative visual editor for building social posts, carousels and reusable design systems",
+      "tags": [
+        "Canvas editor",
+        "Collaboration",
+        "Design tools"
+      ],
+      "url": null,
+      "status": "Project",
+      "highlights": [
+        "Independent text, image and shape layers",
+        "Reusable templates and brand kits",
+        "Multipage exports and live collaboration"
+      ]
+    },
+    {
+      "id": "22",
+      "name": "Sentient 2.0",
+      "folder": "22 Sentient Website Astra",
+      "category": "Web experiences",
+      "description": "An immersive agency website with a sculptural 3D identity, reactive pin fields and an interactive crowd",
+      "tags": [
+        "Three.js",
+        "Motion design",
+        "Art direction"
+      ],
+      "url": "https://chatgptricks.github.io/sentient-2.0/",
+      "status": "Project",
+      "highlights": [
+        "Animated 3D brand emblem",
+        "Interactive crowd and reactive pin surface",
+        "Campaign galleries and presentation decks"
+      ]
+    },
+    {
+      "id": "23",
+      "name": "USS Sentient",
+      "folder": "23 Quarters game",
+      "category": "Creative experiments",
+      "description": "An explorable 3D spacecraft with seven departments, working instruments and a journey beyond the airlock",
+      "tags": [
+        "Three.js",
+        "World building",
+        "Spatial audio"
+      ],
+      "url": "https://chatgptricks.github.io/uss-sentient/",
+      "status": "Project",
+      "highlights": [
+        "Seven connected spacecraft departments",
+        "Interactive instruments and spatial sound",
+        "Spacewalks, wayfinding and exploration"
+      ]
+    },
+    {
+      "id": "24",
+      "name": "Cuentacuentos",
+      "folder": "24 Cuentacuentos",
+      "category": "Digital products",
+      "description": "A watercolor storybook app that creates Spanish reading adventures with expressive characters, sound and page-turning",
+      "tags": [
+        "Illustration",
+        "Storytelling",
+        "PWA"
+      ],
+      "url": "https://chatgptricks.github.io/cuentacuentos/",
+      "status": "Project",
+      "highlights": [
+        "Five storybooks with locally generated stories",
+        "Watercolor scenes and interactive sound",
+        "Personalized family characters and offline reading"
+      ]
+    },
+    {
+      "id": "25",
+      "name": "Distribution Tracker",
+      "folder": "25 Distribution Tracker",
+      "category": "Digital products",
+      "description": "A shared campaign workspace for tracking distribution tasks, proof links and delivery progress",
+      "tags": [
+        "Dashboard",
+        "Collaboration",
+        "Campaigns"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "26",
+      "name": "Halloween",
+      "folder": "26 Halloween Form",
+      "category": "Web experiences",
+      "description": "An illustrated mobile registration experience for Halloween performances, costumes and music requests",
+      "tags": [
+        "Event experience",
+        "Illustration",
+        "Forms"
+      ],
+      "url": "https://ealfaro29.github.io/halloween/",
+      "status": "Project"
+    },
+    {
+      "id": "28",
+      "name": "Mckinsey Tools",
+      "folder": "28 Mckinsey Tools",
+      "category": "Creative experiments",
+      "description": "An experimental creative-toolkit interface with glass surfaces and a playful gravity-driven collapse",
+      "tags": [
+        "Interface design",
+        "Visual effects",
+        "Prototype"
+      ],
+      "url": null,
+      "status": "Prototype"
+    },
+    {
+      "id": "meme-deck",
+      "name": "Meme Deck",
+      "folder": "Meme Deck",
+      "category": "Creative experiments",
+      "description": "A tactile, Braun-inspired soundboard with audio pads, a live waveform and offline playback",
+      "tags": [
+        "Audio",
+        "Interaction",
+        "PWA"
+      ],
+      "url": "https://chatgptricks.github.io/meme-deck-pages/",
+      "status": "Project",
+      "highlights": [
+        "Tactile pads and a live waveform",
+        "Offline audio and custom recordings",
+        "Responsive controls and keyboard shortcuts"
+      ]
+    }
+  ]
+}

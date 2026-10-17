@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="Settings"><title>Settings</title><defs>
+ <linearGradient id="blue" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#b5f2ff"/><stop offset=".35" stop-color="#459cec"/><stop offset="1" stop-color="#12429c"/></linearGradient>
+ <linearGradient id="deepblue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0e5399"/><stop offset="1" stop-color="#062966"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fff4a2"/><stop offset=".35" stop-color="#ffd14d"/><stop offset="1" stop-color="#dc8216"/></linearGradient>
+ <linearGradient id="orange" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#ffed9a"/><stop offset=".36" stop-color="#ffad38"/><stop offset="1" stop-color="#d34f13"/></linearGradient>
+ <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".35" stop-color="#dce6f0"/><stop offset=".6" stop-color="#9caebd"/><stop offset=".8" stop-color="#edf5fc"/><stop offset="1" stop-color="#6a8097"/></linearGradient>
+ <linearGradient id="green" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#dbffac"/><stop offset=".35" stop-color="#87d64b"/><stop offset="1" stop-color="#267b32"/></linearGradient>
+ <linearGradient id="paper" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fffef8"/><stop offset="1" stop-color="#d4dce4"/></linearGradient>
+ <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+ <radialGradient id="glass" cx=".3" cy=".22" r=".9"><stop stop-color="#c9f5ff"/><stop offset=".4" stop-color="#5bc2ef"/><stop offset="1" stop-color="#1b5aab"/></radialGradient>
+ <filter id="shadow" x="-35%" y="-30%" width="170%" height="180%"><feDropShadow dx=".3" dy="1.5" stdDeviation="1.15" flood-color="#17314c" flood-opacity=".35"/></filter>
+</defs><g filter="url(#shadow)" stroke-linejoin="round" stroke-linecap="round">
+ <polygon points="33.94,20.70 39.45,23.38 38.93,26.56 32.85,27.34 31.74,29.32 34.25,34.91 31.80,37.02 26.64,33.71 24.52,34.51 22.85,40.41 19.62,40.45 17.80,34.60 15.66,33.85 10.58,37.29 8.09,35.25 10.45,29.59 9.29,27.64 3.19,27.02 2.59,23.85 8.04,21.03 8.40,18.80 4.14,14.40 5.71,11.58 11.69,12.93 13.41,11.45 12.97,5.33 15.98,4.19 19.70,9.06 21.97,9.04 25.56,4.07 28.60,5.14 28.32,11.26 30.07,12.69 36.02,11.20 37.67,13.97 33.51,18.48" fill="url(#silver)" stroke="#617c96" stroke-width="1.1"/>
+ <circle cx="21" cy="22" r="8.5" fill="url(#blue)" stroke="#52728c"/>
+ <circle cx="21" cy="22" r="4.4" fill="url(#silver)" stroke="#316496"/>
+ <path d="M9 18c1-4 4-7 8-8" stroke="#fff" stroke-width="1.5"/>
+ <polygon points="41.96,36.41 44.69,39.05 43.71,40.87 40.00,40.04 38.92,40.92 38.98,44.72 37.01,45.31 34.97,42.10 33.59,41.96 30.95,44.69 29.13,43.71 29.96,40.00 29.08,38.92 25.28,38.98 24.69,37.01 27.90,34.97 28.04,33.59 25.31,30.95 26.29,29.13 30.00,29.96 31.08,29.08 31.02,25.28 32.99,24.69 35.03,27.90 36.41,28.04 39.05,25.31 40.87,26.29 40.04,30.00 40.92,31.08 44.72,31.02 45.31,32.99 42.10,35.03" fill="url(#gold)" stroke="#b27c35"/>
+ <circle cx="35" cy="35" r="4.5" fill="url(#silver)" stroke="#b27c35"/>
+ <circle cx="35" cy="35" r="1.8" fill="#678caa"/>
+ <path d="m30 30 2-1" stroke="#fff3ba" stroke-width="1.4"/>
+</g></svg>

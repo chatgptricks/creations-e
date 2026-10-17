@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="Meme Deck audio"><title>Meme Deck audio</title><defs>
+ <linearGradient id="blue" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#b5f2ff"/><stop offset=".35" stop-color="#459cec"/><stop offset="1" stop-color="#12429c"/></linearGradient>
+ <linearGradient id="deepblue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0e5399"/><stop offset="1" stop-color="#062966"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fff4a2"/><stop offset=".35" stop-color="#ffd14d"/><stop offset="1" stop-color="#dc8216"/></linearGradient>
+ <linearGradient id="orange" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#ffed9a"/><stop offset=".36" stop-color="#ffad38"/><stop offset="1" stop-color="#d34f13"/></linearGradient>
+ <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".35" stop-color="#dce6f0"/><stop offset=".6" stop-color="#9caebd"/><stop offset=".8" stop-color="#edf5fc"/><stop offset="1" stop-color="#6a8097"/></linearGradient>
+ <linearGradient id="green" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#dbffac"/><stop offset=".35" stop-color="#87d64b"/><stop offset="1" stop-color="#267b32"/></linearGradient>
+ <linearGradient id="paper" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fffef8"/><stop offset="1" stop-color="#d4dce4"/></linearGradient>
+ <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+ <radialGradient id="glass" cx=".3" cy=".22" r=".9"><stop stop-color="#c9f5ff"/><stop offset=".4" stop-color="#5bc2ef"/><stop offset="1" stop-color="#1b5aab"/></radialGradient>
+ <filter id="shadow" x="-35%" y="-30%" width="170%" height="180%"><feDropShadow dx=".3" dy="1.5" stdDeviation="1.15" flood-color="#17314c" flood-opacity=".35"/></filter>
+</defs><g filter="url(#shadow)" stroke-linejoin="round" stroke-linecap="round">
+ <path d="M7 29v-9C7 2 39 2 39 20v10" stroke="#214f85" stroke-width="7"/>
+ <path d="M8 22v-3C8 4 38 4 38 19v3" stroke="url(#silver)" stroke-width="4"/>
+ <path d="M8 20v-1C8 7 19 4 26 6" stroke="#effbff" stroke-width="1.2"/>
+ <rect x="4" y="22" width="9" height="16" rx="4" fill="url(#blue)" stroke="#21558a"/>
+ <rect x="35" y="22" width="9" height="16" rx="4" fill="url(#blue)" stroke="#21558a"/>
+ <path d="M12 25v10m24-10v10" stroke="#102f55" stroke-width="3"/>
+ <path d="M27 20v17c-1-2-5-2-7 0s-1 5 3 5c3 0 5-2 5-5V25l6-2v-6Z" fill="url(#orange)" stroke="#b05b29"/>
+ <path d="m29 20 3-1" stroke="#ffe7a1"/>
+ <path d="M6 26v6m31-6v6" stroke="#a0d9ff" stroke-width="1.2"/>
+</g></svg>

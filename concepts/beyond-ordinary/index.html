@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111211"><meta name="description" content="E — independent designer and creator. An ever-expanding universe of digital products, immersive experiences, and creative experiments.">
+  <title>E — Beyond Ordinary</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/anton.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/space-grotesk.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="styles.css"><script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#work">Skip to selected work</a>
+  <div class="page-grain" aria-hidden="true"></div><div class="scroll-progress" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><span>VIEW</span></div>
+  <header class="site-header">
+    <a class="logo" href="#top" aria-label="E — back to top">E<span>·</span></a>
+    <span class="header-description">INDEPENDENT DESIGNER<br>& CREATOR OF THINGS</span>
+    <nav aria-label="Main navigation"><a href="#work">Work <span>04</span></a><a href="#about">About</a><a href="#archive">Archive <span class="project-count">28</span></a></nav>
+    <button class="motion-toggle" aria-pressed="false" title="Pause motion"><span class="motion-icon" aria-hidden="true">Ⅱ</span><span class="motion-label">MOTION ON</span></button>
+  </header>
+  <main>
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-topline"><span><i class="status-dot"></i> WELCOME TO MY CREATIVE UNIVERSE</span><span>DESIGN / TECHNOLOGY / A LITTLE CHAOS</span></div>
+      <div class="hero-copy"><h1 id="hero-title"><span class="hero-line"><span>BEYOND</span></span><span class="hero-line second"><span>ORDINARY<span class="title-asterisk">✳</span></span></span></h1></div>
+      <div class="sculpture-wrap"><div class="sculpture-glow"></div><canvas id="sculpture" aria-label="Interactive rotating chrome sculpture"></canvas><span class="sculpture-cross cross-top" aria-hidden="true">+</span><span class="sculpture-cross cross-bottom" aria-hidden="true">+</span><button class="sculpture-hint" id="sculpture-pulse"><span class="small-cross">✳</span> GIVE IT A SPIN <span>↗</span></button></div>
+      <div class="hero-bottom"><div class="hero-intro"><span class="intro-marker">[ HELLO, I’M E ]</span><p>I turn curious ideas into digital<br>experiences you can <em>feel.</em></p><a class="round-link" href="#work"><span class="round-icon">↘</span><span>STEP INTO MY WORLD</span></a></div><div class="hero-coordinates"><span>EXPERIMENT No. 001</span><span>KEEP PLAYING. STAY CURIOUS.</span></div><span class="hero-scroll">SCROLL TO EXPLORE <span>↓</span></span></div>
+    </section>
+    <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>THINK STRANGE <b>✳</b> MAKE BEAUTIFUL <b>✳</b> BREAK THE PATTERN <b>✳</b> BUILD WHAT’S NEXT <b>✳</b> </span><span>THINK STRANGE <b>✳</b> MAKE BEAUTIFUL <b>✳</b> BREAK THE PATTERN <b>✳</b> BUILD WHAT’S NEXT <b>✳</b> </span></div></div>
+    <section class="selected section-pad" id="work" aria-labelledby="work-title">
+      <div class="section-meta reveal"><span>[ 01 — SELECTED EXPLORATIONS ]</span><span>A FEW WORLDS I’VE BUILT</span></div>
+      <div class="section-heading reveal"><h2 id="work-title">IDEAS MADE<br><span class="outline">IMPOSSIBLE TO IGNORE.</span></h2><p>Tools to create with. Worlds to get lost in.<br>A few things from my corner of the internet.</p></div>
+      <div class="work-grid" id="featured-projects"></div>
+      <a class="archive-cta reveal" href="#archive"><span>THERE’S MORE WHERE THAT CAME FROM</span><span>THE FULL ARCHIVE <b>↗</b></span></a>
+    </section>
+    <section class="about section-pad" id="about" aria-labelledby="about-title">
+      <div class="section-meta reveal"><span>[ 02 — THE HUMAN BEHIND IT ]</span><span>A WORK IN CONSTANT PROGRESS</span></div>
+      <div class="about-layout"><div class="about-mark" aria-hidden="true"><span>e</span><svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="183"/><path d="M200 0v34M200 366v34M0 200h34M366 200h34"/></svg><span class="about-coordinate">∞ POSSIBILITIES<br>ONE CURIOUS MIND</span></div><div class="about-copy"><h2 class="reveal" id="about-title">PART DESIGNER.<br>PART BUILDER.<br><span>ALL CURIOSITY.</span></h2><p class="reveal">I’m E. I move between design, technology, and storytelling to make ideas tangible. Sometimes that’s a tool. Sometimes it’s an entire world.</p><p class="reveal secondary-copy">This is my playground: an expanding collection of useful products, unexpected interactions, and experiments that ask, <em>“what if?”</em></p><div class="disciplines reveal"><span>ART DIRECTION</span><span>DIGITAL EXPERIENCES</span><span>CREATIVE DEVELOPMENT</span><span>WORLD BUILDING</span></div></div></div>
+    </section>
+    <section class="archive section-pad" id="archive" aria-labelledby="archive-title">
+      <div class="section-meta reveal"><span>[ 03 — THE EVER-EXPANDING ARCHIVE ]</span><span>NO TWO IDEAS ALIKE</span></div>
+      <div class="archive-title-row reveal"><h2 id="archive-title">ALL THE<br>RABBIT HOLES<span>↴</span></h2><span class="archive-total"><b class="project-count">28</b> PROJECTS & COUNTING</span></div>
+      <div class="archive-controls"><div class="filters" aria-label="Filter projects"><button class="active" data-filter="All" aria-pressed="true">All <span class="project-count">28</span></button><button data-filter="Digital products" aria-pressed="false">Products</button><button data-filter="Web experiences" aria-pressed="false">Websites</button><button data-filter="AI & automation" aria-pressed="false">AI & tools</button><button data-filter="Creative experiments" aria-pressed="false">Experiments</button></div><label class="search-label"><span class="search-symbol" aria-hidden="true">⌕</span><input id="project-search" type="search" placeholder="Find something curious…" aria-label="Search projects"><kbd>/</kbd></label></div>
+      <div class="archive-table-head"><span>PROJECT / NAME</span><span>DISCIPLINE</span><span>EXPLORE</span></div><div id="project-list" class="project-list"></div><p id="archive-result" class="archive-result" role="status" aria-live="polite"></p>
+    </section>
+    <section class="closing section-pad"><span class="section-meta">[ STILL JUST GETTING STARTED ]</span><div class="closing-title reveal">THE NEXT<br><span>WHAT IF<span class="closing-star">✳</span></span></div><div class="closing-bottom"><p>Somewhere between an idea<br>and something extraordinary.</p><a class="round-link" href="#top"><span>BACK TO THE SURFACE</span><span class="round-icon">↗</span></a></div></section>
+  </main>
+  <footer><a class="logo" href="#top" aria-label="E — back to top">E<span>·</span></a><span>DESIGNED TO BE A LITTLE DIFFERENT.</span><span>© <span id="year">2026</span> E</span><span>END OF PAGE. NOT OF IDEAS. <span class="orange">✳</span></span></footer>
+  <dialog id="project-dialog" aria-labelledby="dialog-title"><div class="dialog-bar"><span>E — PROJECT EXPLORER</span><button class="dialog-close" aria-label="Close project">CLOSE <span>×</span></button></div><div id="dialog-content"></div></dialog>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <noscript><style>.reveal{opacity:1;transform:none}.hero-line>span{transform:none}</style><div class="noscript-note">JavaScript brings the interactive project archive and sculpture to life. Enable it to explore the full portfolio.</div></noscript>
+</body></html>

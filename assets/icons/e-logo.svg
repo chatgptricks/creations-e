@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="Creations E"><title>Creations E</title><defs>
+ <linearGradient id="blue" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#b5f2ff"/><stop offset=".35" stop-color="#459cec"/><stop offset="1" stop-color="#12429c"/></linearGradient>
+ <linearGradient id="deepblue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0e5399"/><stop offset="1" stop-color="#062966"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fff4a2"/><stop offset=".35" stop-color="#ffd14d"/><stop offset="1" stop-color="#dc8216"/></linearGradient>
+ <linearGradient id="orange" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#ffed9a"/><stop offset=".36" stop-color="#ffad38"/><stop offset="1" stop-color="#d34f13"/></linearGradient>
+ <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".35" stop-color="#dce6f0"/><stop offset=".6" stop-color="#9caebd"/><stop offset=".8" stop-color="#edf5fc"/><stop offset="1" stop-color="#6a8097"/></linearGradient>
+ <linearGradient id="green" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#dbffac"/><stop offset=".35" stop-color="#87d64b"/><stop offset="1" stop-color="#267b32"/></linearGradient>
+ <linearGradient id="paper" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fffef8"/><stop offset="1" stop-color="#d4dce4"/></linearGradient>
+ <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+ <radialGradient id="glass" cx=".3" cy=".22" r=".9"><stop stop-color="#c9f5ff"/><stop offset=".4" stop-color="#5bc2ef"/><stop offset="1" stop-color="#1b5aab"/></radialGradient>
+ <filter id="shadow" x="-35%" y="-30%" width="170%" height="180%"><feDropShadow dx=".3" dy="1.5" stdDeviation="1.15" flood-color="#17314c" flood-opacity=".35"/></filter>
+</defs><g filter="url(#shadow)" stroke-linejoin="round" stroke-linecap="round">
+ <path d="M6 5c6-1 12 0 17 3v15c-7-3-11-3-17-2Z" fill="url(#orange)" stroke="#c65e29"/>
+ <path d="M26 8c6 0 11-2 16-3v16c-5 1-10 2-16 2Z" fill="url(#green)" stroke="#518d3b"/>
+ <path d="M6 24c6-1 12 0 17 3v16c-6-3-11-4-17-3Z" fill="url(#blue)" stroke="#2d669a"/>
+ <path d="M26 27c6 0 11-2 16-3v16c-6 2-11 3-16 3Z" fill="url(#gold)" stroke="#bd8c30"/>
+ <path d="M8 7c4 0 8 0 12 2M28 10c4 0 8-1 12-2M8 26c4 0 8 0 12 2M28 29c4 0 8-1 12-2" stroke="#fff" stroke-opacity=".55" stroke-width="1.2"/>
+ <path d="M17 25h15c0-10-17-12-17 0 0 10 11 13 17 5" stroke="#29486a" stroke-opacity=".65" stroke-width="6"/>
+ <path d="M17 24h15c0-10-17-12-17 0 0 10 11 13 17 5" stroke="#fffef2" stroke-width="4"/>
+</g></svg>

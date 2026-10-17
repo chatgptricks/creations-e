@@ -1,0 +1,214 @@
+{
+  "projects": [
+    {
+      "id": "01",
+      "name": "Pageants",
+      "folder": "01 Pageants",
+      "category": "Digital products",
+      "description": "A pageant toolkit combining collaborative judging, scoresheets, results, and a searchable creative asset catalog.",
+      "tags": [
+        "Product design",
+        "Scoring",
+        "React"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "02",
+      "name": "The Ride CR",
+      "folder": "02 TheRideCR",
+      "category": "Web experiences",
+      "description": "A bilingual travel experience for private transfers across Costa Rica, with route quotes and reservation flows.",
+      "tags": [
+        "Travel",
+        "Bilingual UX",
+        "Motion"
+      ],
+      "url": "https://theridecr.net/",
+      "status": "Project"
+    },
+    {
+      "id": "03",
+      "name": "Posts",
+      "folder": "03 Posts",
+      "category": "Creative experiments",
+      "description": "A social design library spanning editorial carousels, charts, campaigns, portraits, and prompt-driven visual experiments.",
+      "tags": [
+        "Art direction",
+        "Editorial",
+        "Social design"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "04",
+      "name": "Sentient Apps",
+      "folder": "04 Sentient Apps",
+      "category": "AI & automation",
+      "description": "A collection of tools for content scheduling, exchange-rate tracking, tweet mockups, animated charts, and giveaways.",
+      "tags": [
+        "Creative tools",
+        "Automation",
+        "Data visualization"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "05",
+      "name": "Tests & Minis",
+      "folder": "05 Tests or Minis",
+      "category": "Creative experiments",
+      "description": "Small browser and 3D experiments for image calibration, panorama-to-skybox conversion, and procedural modeling.",
+      "tags": [
+        "Prototyping",
+        "3D",
+        "Browser tools"
+      ],
+      "url": null,
+      "status": "Prototype"
+    },
+    {
+      "id": "06",
+      "name": "ChatGPTricks",
+      "folder": "06 CTricks.Fun",
+      "category": "Web experiences",
+      "description": "A browsable prompt library bringing reusable AI prompts and creative guidance into a dedicated web experience.",
+      "tags": [
+        "AI prompts",
+        "Content design",
+        "React"
+      ],
+      "url": "https://chatgptricks.fun/",
+      "status": "Project"
+    },
+    {
+      "id": "07",
+      "name": "The Boy from In Between",
+      "folder": "07 Books",
+      "category": "Creative experiments",
+      "description": "An original science-fiction story world following Albert and an unexpected crossing between realities.",
+      "tags": [
+        "Writing",
+        "Worldbuilding",
+        "Book design"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "08",
+      "name": "The Showroom",
+      "folder": "08 Showroom",
+      "category": "Web experiences",
+      "description": "A collectors-club website concept with a bold landing page, member sign-in, and a private profile area.",
+      "tags": [
+        "Community",
+        "Next.js",
+        "Visual identity"
+      ],
+      "url": null,
+      "status": "Prototype"
+    },
+    {
+      "id": "09",
+      "name": "Sentient Dash",
+      "folder": "09 Tricks Dash",
+      "category": "Digital products",
+      "description": "An Instagram research and production workspace connecting post discovery, content queues, account analytics, and promotion reviews.",
+      "tags": [
+        "Dashboard",
+        "Product design",
+        "Analytics"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "10",
+      "name": "Cortex",
+      "folder": "10 Predict",
+      "category": "AI & automation",
+      "description": "The data and automation backend connecting Sentient Dash research, production workflows, analytics, and agent integrations.",
+      "tags": [
+        "Automation",
+        "APIs",
+        "Data systems"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "11",
+      "name": "Sentient Promotion Manager",
+      "folder": "11 Sentient CRM",
+      "category": "Digital products",
+      "description": "A role-based workspace guiding client promotions from sales intake through creative approval, publishing verification, and finance.",
+      "tags": [
+        "Workflow design",
+        "React",
+        "Supabase"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "12",
+      "name": "Social Brain",
+      "folder": "12 Social Brain",
+      "category": "AI & automation",
+      "description": "An AI-assisted content tool that turns article links into social copy and editable vertical carousels.",
+      "tags": [
+        "AI tooling",
+        "Content creation",
+        "Visual editing"
+      ],
+      "url": null,
+      "status": "Project"
+    },
+    {
+      "id": "13",
+      "name": "Neo Dynamic Logo",
+      "folder": "13 Neo Logo",
+      "category": "Creative experiments",
+      "description": "A luminous, interactive 3D identity experiment shaped by custom shaders, flowing gradients, and responsive motion.",
+      "tags": [
+        "WebGL",
+        "Motion identity",
+        "Three.js"
+      ],
+      "url": null,
+      "status": "Prototype"
+    },
+    {
+      "id": "14",
+      "name": "Neo Solutions",
+      "folder": "14 NEO WEBSITE",
+      "category": "Web experiences",
+      "description": "A bilingual AI-services website combining a dynamic visual identity, product storytelling, interactive demos, and lead capture.",
+      "tags": [
+        "Web design",
+        "Motion",
+        "Brand experience"
+      ],
+      "url": "https://neosolutions.ai/",
+      "status": "Project"
+    },
+    {
+      "id": "16",
+      "name": "Sentient Case Studies",
+      "folder": "16 Sentient Case Studies",
+      "category": "Web experiences",
+      "description": "A campaign showcase presenting sponsored social work through client cards, performance summaries, and Instagram-style previews.",
+      "tags": [
+        "Case studies",
+        "Data storytelling",
+        "Web design"
+      ],
+      "url": null,
+      "status": "Project"
+    }
+  ]
+}

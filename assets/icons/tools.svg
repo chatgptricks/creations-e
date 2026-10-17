@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="Creative tools"><title>Creative tools</title><defs>
+ <linearGradient id="blue" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#b5f2ff"/><stop offset=".35" stop-color="#459cec"/><stop offset="1" stop-color="#12429c"/></linearGradient>
+ <linearGradient id="deepblue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0e5399"/><stop offset="1" stop-color="#062966"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fff4a2"/><stop offset=".35" stop-color="#ffd14d"/><stop offset="1" stop-color="#dc8216"/></linearGradient>
+ <linearGradient id="orange" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#ffed9a"/><stop offset=".36" stop-color="#ffad38"/><stop offset="1" stop-color="#d34f13"/></linearGradient>
+ <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".35" stop-color="#dce6f0"/><stop offset=".6" stop-color="#9caebd"/><stop offset=".8" stop-color="#edf5fc"/><stop offset="1" stop-color="#6a8097"/></linearGradient>
+ <linearGradient id="green" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#dbffac"/><stop offset=".35" stop-color="#87d64b"/><stop offset="1" stop-color="#267b32"/></linearGradient>
+ <linearGradient id="paper" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fffef8"/><stop offset="1" stop-color="#d4dce4"/></linearGradient>
+ <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+ <radialGradient id="glass" cx=".3" cy=".22" r=".9"><stop stop-color="#c9f5ff"/><stop offset=".4" stop-color="#5bc2ef"/><stop offset="1" stop-color="#1b5aab"/></radialGradient>
+ <filter id="shadow" x="-35%" y="-30%" width="170%" height="180%"><feDropShadow dx=".3" dy="1.5" stdDeviation="1.15" flood-color="#17314c" flood-opacity=".35"/></filter>
+</defs><g filter="url(#shadow)" stroke-linejoin="round" stroke-linecap="round">
+ <path d="m9 5 7 1 4 6-4 5 22 20c2 3-2 7-5 5L12 21l-6-1-3-7 3-6 1 7 4 2 3-4Z" fill="url(#silver)" stroke="#647f97"/>
+ <path d="m35 5 7 6-2 4-5 1-14 16-4-4 15-16v-5Z" fill="url(#blue)" stroke="#2b5d8f"/>
+ <path d="m17 26 7 6-8 10c-3 4-11-3-8-6Z" fill="url(#gold)" stroke="#b7792b"/>
+ <path d="m16 31-5 6m8-3-5 6" stroke="#e6a138" stroke-width="1.5"/>
+ <path d="m34 8 5 4-3 1-3-3Z" fill="#bde4ff"/>
+ <path d="m19 16 16 16" stroke="#f5fbff" stroke-width="1.1"/>
+ <circle cx="35" cy="38" r="1.6" fill="#718fa5" stroke="#e2f0f7"/>
+</g></svg>
